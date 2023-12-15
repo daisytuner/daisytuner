@@ -1,0 +1,1849 @@
+{
+  "type": "SDFG",
+  "attributes": {
+    "name": "loop_body_30_cutout_cutout",
+    "arg_names": [],
+    "constants_prop": {},
+    "_arrays": {
+      "ZSOLQB": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1",
+            "NPROMA",
+            "5*NPROMA"
+          ],
+          "total_size": "25*NPROMA",
+          "offset": [
+            "-1",
+            "-1",
+            "-1"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "NPROMA",
+            "5",
+            "5"
+          ],
+          "transient": false,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      },
+      "ZQLHS": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1",
+            "NPROMA",
+            "5*NPROMA"
+          ],
+          "total_size": "25*NPROMA",
+          "offset": [
+            "-1",
+            "-1",
+            "-1"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "NPROMA",
+            "5",
+            "5"
+          ],
+          "transient": false,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      },
+      "ZFALLSINK": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1",
+            "NPROMA"
+          ],
+          "total_size": "5*NPROMA",
+          "offset": [
+            "-1",
+            "-1"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "NPROMA",
+            "5"
+          ],
+          "transient": false,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      }
+    },
+    "symbols": {
+      "NPROMA": "int32",
+      "_for_it_95": "int32",
+      "_for_it_96": "int64"
+    },
+    "instrument": "No_Instrumentation",
+    "global_code": {
+      "frame": {
+        "string_data": "",
+        "language": "CPP"
+      }
+    },
+    "init_code": {
+      "frame": {
+        "string_data": "",
+        "language": "CPP"
+      }
+    },
+    "exit_code": {
+      "frame": {
+        "string_data": "",
+        "language": "CPP"
+      }
+    },
+    "orig_sdfg": null,
+    "transformation_hist": [],
+    "logical_groups": [],
+    "openmp_sections": false,
+    "debuginfo": {
+      "type": "DebugInfo",
+      "start_line": 0,
+      "end_line": 0,
+      "start_column": 0,
+      "end_column": 0,
+      "filename": null
+    },
+    "_pgrids": {},
+    "_subarrays": {},
+    "_rdistrarrays": {},
+    "callback_mapping": {},
+    "is_collapsed": false,
+    "hash": "843773db6220def35191d413ed5dfe04feaeb2b38148467a7e19b3985fb1acd7"
+  },
+  "nodes": [
+    {
+      "type": "SDFGState",
+      "label": "single_state_body",
+      "id": 0,
+      "collapsed": false,
+      "scope_dict": {
+        "-1": [
+          0,
+          1,
+          2,
+          3,
+          5
+        ],
+        "1": [
+          4,
+          6
+        ]
+      },
+      "nodes": [
+        {
+          "type": "AccessNode",
+          "label": "ZSOLQB",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 472,
+              "end_line": 472,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/transformation/interstate/loop_to_map.py"
+            },
+            "data": "ZSOLQB",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 0,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "MapEntry",
+          "label": "single_state_body_map[_for_it_97=1:NPROMA + 1]",
+          "attributes": {
+            "label": "single_state_body_map",
+            "params": [
+              "_for_it_97"
+            ],
+            "range": {
+              "type": "Range",
+              "ranges": [
+                {
+                  "start": "1",
+                  "end": "NPROMA",
+                  "step": "1",
+                  "tile": "1"
+                }
+              ]
+            },
+            "schedule": "Default",
+            "unroll": false,
+            "collapse": 1,
+            "debuginfo": null,
+            "is_collapsed": false,
+            "instrument": "No_Instrumentation",
+            "in_connectors": {
+              "IN_1": null,
+              "IN_2": null,
+              "IN_3": null
+            },
+            "out_connectors": {
+              "OUT_1": null,
+              "OUT_2": null,
+              "OUT_3": null
+            }
+          },
+          "id": 1,
+          "scope_entry": null,
+          "scope_exit": "4"
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZQLHS",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 472,
+              "end_line": 472,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/transformation/interstate/loop_to_map.py"
+            },
+            "data": "ZQLHS",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 2,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZFALLSINK",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 472,
+              "end_line": 472,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/transformation/interstate/loop_to_map.py"
+            },
+            "data": "ZFALLSINK",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 3,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "MapExit",
+          "label": "single_state_body_map[_for_it_97=1:NPROMA + 1]",
+          "attributes": {
+            "in_connectors": {
+              "IN_1": null
+            },
+            "out_connectors": {
+              "OUT_1": null
+            }
+          },
+          "id": 4,
+          "scope_entry": "1",
+          "scope_exit": "4"
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZQLHS",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 475,
+              "end_line": 475,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/transformation/interstate/loop_to_map.py"
+            },
+            "data": "ZQLHS",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 5,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "NestedSDFG",
+          "label": "loop_body",
+          "attributes": {
+            "sdfg": {
+              "type": "SDFG",
+              "attributes": {
+                "name": "loop_body_31",
+                "arg_names": [],
+                "constants_prop": {},
+                "_arrays": {
+                  "ZSOLQB": {
+                    "type": "Array",
+                    "attributes": {
+                      "allow_conflicts": false,
+                      "strides": [
+                        "1",
+                        "NPROMA",
+                        "5*NPROMA"
+                      ],
+                      "total_size": "25*NPROMA",
+                      "offset": [
+                        "-1",
+                        "-1",
+                        "-1"
+                      ],
+                      "may_alias": false,
+                      "alignment": 0,
+                      "start_offset": 0,
+                      "optional": false,
+                      "pool": false,
+                      "dtype": "float64",
+                      "shape": [
+                        "NPROMA",
+                        "5",
+                        "5"
+                      ],
+                      "transient": false,
+                      "storage": "Default",
+                      "lifetime": "Scope",
+                      "location": {},
+                      "debuginfo": null
+                    }
+                  },
+                  "ZQLHS": {
+                    "type": "Array",
+                    "attributes": {
+                      "allow_conflicts": false,
+                      "strides": [
+                        "1",
+                        "NPROMA",
+                        "5*NPROMA"
+                      ],
+                      "total_size": "25*NPROMA",
+                      "offset": [
+                        "-1",
+                        "-1",
+                        "-1"
+                      ],
+                      "may_alias": false,
+                      "alignment": 0,
+                      "start_offset": 0,
+                      "optional": false,
+                      "pool": false,
+                      "dtype": "float64",
+                      "shape": [
+                        "NPROMA",
+                        "5",
+                        "5"
+                      ],
+                      "transient": false,
+                      "storage": "Default",
+                      "lifetime": "Scope",
+                      "location": {},
+                      "debuginfo": null
+                    }
+                  },
+                  "ZFALLSINK": {
+                    "type": "Array",
+                    "attributes": {
+                      "allow_conflicts": false,
+                      "strides": [
+                        "1",
+                        "NPROMA"
+                      ],
+                      "total_size": "5*NPROMA",
+                      "offset": [
+                        "-1",
+                        "-1"
+                      ],
+                      "may_alias": false,
+                      "alignment": 0,
+                      "start_offset": 0,
+                      "optional": false,
+                      "pool": false,
+                      "dtype": "float64",
+                      "shape": [
+                        "NPROMA",
+                        "5"
+                      ],
+                      "transient": false,
+                      "storage": "Default",
+                      "lifetime": "Scope",
+                      "location": {},
+                      "debuginfo": null
+                    }
+                  }
+                },
+                "symbols": {
+                  "NPROMA": "int32",
+                  "_for_it_95": "int32",
+                  "_for_it_96": "int32",
+                  "_for_it_97": "int32",
+                  "_for_it_98": "int32"
+                },
+                "instrument": "No_Instrumentation",
+                "global_code": {
+                  "frame": {
+                    "string_data": "",
+                    "language": "CPP"
+                  }
+                },
+                "init_code": {
+                  "frame": {
+                    "string_data": "",
+                    "language": "CPP"
+                  }
+                },
+                "exit_code": {
+                  "frame": {
+                    "string_data": "",
+                    "language": "CPP"
+                  }
+                },
+                "orig_sdfg": null,
+                "transformation_hist": [],
+                "logical_groups": [],
+                "openmp_sections": false,
+                "debuginfo": {
+                  "type": "DebugInfo",
+                  "start_line": 0,
+                  "end_line": 0,
+                  "start_column": 0,
+                  "end_column": 0,
+                  "filename": null
+                },
+                "_pgrids": {},
+                "_subarrays": {},
+                "_rdistrarrays": {},
+                "callback_mapping": {},
+                "is_collapsed": false
+              },
+              "nodes": [
+                {
+                  "type": "SDFGState",
+                  "label": "_state_l3692_c3692_4",
+                  "id": 0,
+                  "collapsed": false,
+                  "scope_dict": {
+                    "-1": [
+                      0,
+                      1,
+                      2
+                    ]
+                  },
+                  "nodes": [
+                    {
+                      "type": "Tasklet",
+                      "label": "T_l3692_c3692",
+                      "attributes": {
+                        "code": {
+                          "string_data": "ZQLHS_out_1 = (1.0 + ZFALLSINK_0_in_1)",
+                          "language": "Python"
+                        },
+                        "state_fields": [],
+                        "code_global": {
+                          "string_data": "",
+                          "language": "CPP"
+                        },
+                        "code_init": {
+                          "string_data": "",
+                          "language": "CPP"
+                        },
+                        "code_exit": {
+                          "string_data": "",
+                          "language": "CPP"
+                        },
+                        "debuginfo": {
+                          "type": "DebugInfo",
+                          "start_line": 3692,
+                          "end_line": 3692,
+                          "start_column": 3692,
+                          "end_column": 0,
+                          "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/cloudsc_runner_old.py"
+                        },
+                        "instrument": "No_Instrumentation",
+                        "side_effects": null,
+                        "ignored_symbols": [],
+                        "label": "T_l3692_c3692",
+                        "location": {},
+                        "environments": [],
+                        "in_connectors": {
+                          "ZFALLSINK_0_in_1": null
+                        },
+                        "out_connectors": {
+                          "ZQLHS_out_1": null
+                        }
+                      },
+                      "id": 0,
+                      "scope_entry": null,
+                      "scope_exit": null
+                    },
+                    {
+                      "type": "AccessNode",
+                      "label": "ZFALLSINK",
+                      "attributes": {
+                        "setzero": false,
+                        "debuginfo": {
+                          "type": "DebugInfo",
+                          "start_line": 38,
+                          "end_line": 38,
+                          "start_column": 0,
+                          "end_column": 0,
+                          "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+                        },
+                        "data": "ZFALLSINK",
+                        "instrument": "No_Instrumentation",
+                        "instrument_condition": {
+                          "string_data": "1",
+                          "language": "CPP"
+                        },
+                        "in_connectors": {},
+                        "out_connectors": {}
+                      },
+                      "id": 1,
+                      "scope_entry": null,
+                      "scope_exit": null
+                    },
+                    {
+                      "type": "AccessNode",
+                      "label": "ZQLHS",
+                      "attributes": {
+                        "setzero": false,
+                        "debuginfo": {
+                          "type": "DebugInfo",
+                          "start_line": 46,
+                          "end_line": 46,
+                          "start_column": 0,
+                          "end_column": 0,
+                          "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+                        },
+                        "data": "ZQLHS",
+                        "instrument": "No_Instrumentation",
+                        "instrument_condition": {
+                          "string_data": "1",
+                          "language": "CPP"
+                        },
+                        "in_connectors": {},
+                        "out_connectors": {}
+                      },
+                      "id": 2,
+                      "scope_entry": null,
+                      "scope_exit": null
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "type": "MultiConnectorEdge",
+                      "attributes": {
+                        "data": {
+                          "type": "Memlet",
+                          "attributes": {
+                            "volume": "1",
+                            "dynamic": false,
+                            "subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "other_subset": null,
+                            "data": "ZFALLSINK",
+                            "wcr": null,
+                            "debuginfo": null,
+                            "wcr_nonatomic": false,
+                            "allow_oob": false,
+                            "src_subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "dst_subset": null,
+                            "is_data_src": true,
+                            "num_accesses": "1"
+                          }
+                        }
+                      },
+                      "src": "1",
+                      "dst": "0",
+                      "dst_connector": "ZFALLSINK_0_in_1",
+                      "src_connector": null
+                    },
+                    {
+                      "type": "MultiConnectorEdge",
+                      "attributes": {
+                        "data": {
+                          "type": "Memlet",
+                          "attributes": {
+                            "volume": "1",
+                            "dynamic": false,
+                            "subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "other_subset": null,
+                            "data": "ZQLHS",
+                            "wcr": null,
+                            "debuginfo": null,
+                            "wcr_nonatomic": false,
+                            "allow_oob": false,
+                            "src_subset": null,
+                            "dst_subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "is_data_src": false,
+                            "num_accesses": "1"
+                          }
+                        }
+                      },
+                      "src": "0",
+                      "dst": "2",
+                      "dst_connector": null,
+                      "src_connector": "ZQLHS_out_1"
+                    }
+                  ],
+                  "attributes": {
+                    "nosync": false,
+                    "instrument": "No_Instrumentation",
+                    "symbol_instrument": "No_Instrumentation",
+                    "symbol_instrument_condition": {
+                      "string_data": "1",
+                      "language": "CPP"
+                    },
+                    "executions": "0",
+                    "dynamic_executions": true,
+                    "ranges": {},
+                    "location": {},
+                    "is_collapsed": false
+                  }
+                },
+                {
+                  "type": "SDFGState",
+                  "label": "exit",
+                  "id": 1,
+                  "collapsed": false,
+                  "scope_dict": {
+                    "-1": []
+                  },
+                  "nodes": [],
+                  "edges": [],
+                  "attributes": {
+                    "nosync": false,
+                    "instrument": "No_Instrumentation",
+                    "symbol_instrument": "No_Instrumentation",
+                    "symbol_instrument_condition": {
+                      "string_data": "1",
+                      "language": "CPP"
+                    },
+                    "executions": "0",
+                    "dynamic_executions": true,
+                    "ranges": {},
+                    "location": {},
+                    "is_collapsed": false
+                  }
+                },
+                {
+                  "type": "SDFGState",
+                  "label": "_state_l3694_c3694_8",
+                  "id": 2,
+                  "collapsed": false,
+                  "scope_dict": {
+                    "-1": [
+                      0,
+                      1,
+                      2,
+                      3
+                    ]
+                  },
+                  "nodes": [
+                    {
+                      "type": "Tasklet",
+                      "label": "T_l3694_c3694",
+                      "attributes": {
+                        "code": {
+                          "string_data": "ZQLHS_out_1 = (ZQLHS_0_in_1 + ZSOLQB_0_in_1)",
+                          "language": "Python"
+                        },
+                        "state_fields": [],
+                        "code_global": {
+                          "string_data": "",
+                          "language": "CPP"
+                        },
+                        "code_init": {
+                          "string_data": "",
+                          "language": "CPP"
+                        },
+                        "code_exit": {
+                          "string_data": "",
+                          "language": "CPP"
+                        },
+                        "debuginfo": {
+                          "type": "DebugInfo",
+                          "start_line": 3694,
+                          "end_line": 3694,
+                          "start_column": 3694,
+                          "end_column": 0,
+                          "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/cloudsc_runner_old.py"
+                        },
+                        "instrument": "No_Instrumentation",
+                        "side_effects": null,
+                        "ignored_symbols": [],
+                        "label": "T_l3694_c3694",
+                        "location": {},
+                        "environments": [],
+                        "in_connectors": {
+                          "ZQLHS_0_in_1": null,
+                          "ZSOLQB_0_in_1": null
+                        },
+                        "out_connectors": {
+                          "ZQLHS_out_1": null
+                        }
+                      },
+                      "id": 0,
+                      "scope_entry": null,
+                      "scope_exit": null
+                    },
+                    {
+                      "type": "AccessNode",
+                      "label": "ZQLHS",
+                      "attributes": {
+                        "setzero": false,
+                        "debuginfo": {
+                          "type": "DebugInfo",
+                          "start_line": 38,
+                          "end_line": 38,
+                          "start_column": 0,
+                          "end_column": 0,
+                          "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+                        },
+                        "data": "ZQLHS",
+                        "instrument": "No_Instrumentation",
+                        "instrument_condition": {
+                          "string_data": "1",
+                          "language": "CPP"
+                        },
+                        "in_connectors": {},
+                        "out_connectors": {}
+                      },
+                      "id": 1,
+                      "scope_entry": null,
+                      "scope_exit": null
+                    },
+                    {
+                      "type": "AccessNode",
+                      "label": "ZSOLQB",
+                      "attributes": {
+                        "setzero": false,
+                        "debuginfo": {
+                          "type": "DebugInfo",
+                          "start_line": 38,
+                          "end_line": 38,
+                          "start_column": 0,
+                          "end_column": 0,
+                          "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+                        },
+                        "data": "ZSOLQB",
+                        "instrument": "No_Instrumentation",
+                        "instrument_condition": {
+                          "string_data": "1",
+                          "language": "CPP"
+                        },
+                        "in_connectors": {},
+                        "out_connectors": {}
+                      },
+                      "id": 2,
+                      "scope_entry": null,
+                      "scope_exit": null
+                    },
+                    {
+                      "type": "AccessNode",
+                      "label": "ZQLHS",
+                      "attributes": {
+                        "setzero": false,
+                        "debuginfo": {
+                          "type": "DebugInfo",
+                          "start_line": 46,
+                          "end_line": 46,
+                          "start_column": 0,
+                          "end_column": 0,
+                          "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+                        },
+                        "data": "ZQLHS",
+                        "instrument": "No_Instrumentation",
+                        "instrument_condition": {
+                          "string_data": "1",
+                          "language": "CPP"
+                        },
+                        "in_connectors": {},
+                        "out_connectors": {}
+                      },
+                      "id": 3,
+                      "scope_entry": null,
+                      "scope_exit": null
+                    }
+                  ],
+                  "edges": [
+                    {
+                      "type": "MultiConnectorEdge",
+                      "attributes": {
+                        "data": {
+                          "type": "Memlet",
+                          "attributes": {
+                            "volume": "1",
+                            "dynamic": false,
+                            "subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "other_subset": null,
+                            "data": "ZQLHS",
+                            "wcr": null,
+                            "debuginfo": null,
+                            "wcr_nonatomic": false,
+                            "allow_oob": false,
+                            "src_subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "dst_subset": null,
+                            "is_data_src": true,
+                            "num_accesses": "1"
+                          }
+                        }
+                      },
+                      "src": "1",
+                      "dst": "0",
+                      "dst_connector": "ZQLHS_0_in_1",
+                      "src_connector": null
+                    },
+                    {
+                      "type": "MultiConnectorEdge",
+                      "attributes": {
+                        "data": {
+                          "type": "Memlet",
+                          "attributes": {
+                            "volume": "1",
+                            "dynamic": false,
+                            "subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_98",
+                                  "end": "_for_it_98",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "other_subset": null,
+                            "data": "ZSOLQB",
+                            "wcr": null,
+                            "debuginfo": null,
+                            "wcr_nonatomic": false,
+                            "allow_oob": false,
+                            "src_subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_98",
+                                  "end": "_for_it_98",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "dst_subset": null,
+                            "is_data_src": true,
+                            "num_accesses": "1"
+                          }
+                        }
+                      },
+                      "src": "2",
+                      "dst": "0",
+                      "dst_connector": "ZSOLQB_0_in_1",
+                      "src_connector": null
+                    },
+                    {
+                      "type": "MultiConnectorEdge",
+                      "attributes": {
+                        "data": {
+                          "type": "Memlet",
+                          "attributes": {
+                            "volume": "1",
+                            "dynamic": false,
+                            "subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "other_subset": null,
+                            "data": "ZQLHS",
+                            "wcr": null,
+                            "debuginfo": null,
+                            "wcr_nonatomic": false,
+                            "allow_oob": false,
+                            "src_subset": null,
+                            "dst_subset": {
+                              "type": "Range",
+                              "ranges": [
+                                {
+                                  "start": "_for_it_97",
+                                  "end": "_for_it_97",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_96",
+                                  "end": "_for_it_96",
+                                  "step": "1",
+                                  "tile": "1"
+                                },
+                                {
+                                  "start": "_for_it_95",
+                                  "end": "_for_it_95",
+                                  "step": "1",
+                                  "tile": "1"
+                                }
+                              ]
+                            },
+                            "is_data_src": false,
+                            "num_accesses": "1"
+                          }
+                        }
+                      },
+                      "src": "0",
+                      "dst": "3",
+                      "dst_connector": null,
+                      "src_connector": "ZQLHS_out_1"
+                    }
+                  ],
+                  "attributes": {
+                    "nosync": false,
+                    "instrument": "No_Instrumentation",
+                    "symbol_instrument": "No_Instrumentation",
+                    "symbol_instrument_condition": {
+                      "string_data": "1",
+                      "language": "CPP"
+                    },
+                    "executions": "0",
+                    "dynamic_executions": true,
+                    "ranges": {},
+                    "location": {},
+                    "is_collapsed": false
+                  }
+                },
+                {
+                  "type": "SDFGState",
+                  "label": "GuardFOR_l_3693_c_3693",
+                  "id": 3,
+                  "collapsed": false,
+                  "scope_dict": {
+                    "-1": []
+                  },
+                  "nodes": [],
+                  "edges": [],
+                  "attributes": {
+                    "nosync": false,
+                    "instrument": "No_Instrumentation",
+                    "symbol_instrument": "No_Instrumentation",
+                    "symbol_instrument_condition": {
+                      "string_data": "1",
+                      "language": "CPP"
+                    },
+                    "executions": "0",
+                    "dynamic_executions": true,
+                    "ranges": {},
+                    "location": {},
+                    "is_collapsed": false
+                  }
+                }
+              ],
+              "edges": [
+                {
+                  "type": "Edge",
+                  "attributes": {
+                    "data": {
+                      "type": "InterstateEdge",
+                      "attributes": {
+                        "assignments": {},
+                        "condition": {
+                          "string_data": "(_for_it_98 <= 5)",
+                          "language": "Python"
+                        }
+                      },
+                      "label": "(_for_it_98 <= 5)"
+                    }
+                  },
+                  "src": "3",
+                  "dst": "2"
+                },
+                {
+                  "type": "Edge",
+                  "attributes": {
+                    "data": {
+                      "type": "InterstateEdge",
+                      "attributes": {
+                        "assignments": {
+                          "_for_it_98": "1"
+                        },
+                        "condition": {
+                          "string_data": "1",
+                          "language": "Python"
+                        }
+                      },
+                      "label": "_for_it_98=1"
+                    }
+                  },
+                  "src": "0",
+                  "dst": "3"
+                },
+                {
+                  "type": "Edge",
+                  "attributes": {
+                    "data": {
+                      "type": "InterstateEdge",
+                      "attributes": {
+                        "assignments": {
+                          "_for_it_98": "(_for_it_98 + 1)"
+                        },
+                        "condition": {
+                          "string_data": "1",
+                          "language": "Python"
+                        }
+                      },
+                      "label": "_for_it_98=(_for_it_98 + 1)"
+                    }
+                  },
+                  "src": "2",
+                  "dst": "3"
+                },
+                {
+                  "type": "Edge",
+                  "attributes": {
+                    "data": {
+                      "type": "InterstateEdge",
+                      "attributes": {
+                        "assignments": {},
+                        "condition": {
+                          "string_data": "(not (_for_it_98 <= 5))",
+                          "language": "Python"
+                        }
+                      },
+                      "label": "(not (_for_it_98 <= 5))"
+                    }
+                  },
+                  "src": "3",
+                  "dst": "1"
+                }
+              ],
+              "collapsed": false,
+              "label": "",
+              "id": null,
+              "sdfg_list_id": 1,
+              "start_state": 0
+            },
+            "schedule": "Default",
+            "symbol_mapping": {
+              "NPROMA": "NPROMA",
+              "_for_it_95": "_for_it_95",
+              "_for_it_96": "_for_it_96",
+              "_for_it_97": "_for_it_97"
+            },
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 465,
+              "end_line": 465,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/transformation/interstate/loop_to_map.py"
+            },
+            "is_collapsed": false,
+            "instrument": "No_Instrumentation",
+            "no_inline": false,
+            "unique_name": "",
+            "label": "loop_body",
+            "location": {},
+            "environments": [],
+            "in_connectors": {
+              "ZFALLSINK": null,
+              "ZQLHS": null,
+              "ZSOLQB": null
+            },
+            "out_connectors": {
+              "ZQLHS": null
+            }
+          },
+          "id": 6,
+          "scope_entry": "1",
+          "scope_exit": "4"
+        }
+      ],
+      "edges": [
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "25*NPROMA**2",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZSOLQB",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "25*NPROMA**2"
+              }
+            }
+          },
+          "src": "0",
+          "dst": "1",
+          "dst_connector": "IN_1",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "25*NPROMA**2",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZQLHS",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "25*NPROMA**2"
+              }
+            }
+          },
+          "src": "2",
+          "dst": "1",
+          "dst_connector": "IN_2",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "5*NPROMA**2",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZFALLSINK",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "5*NPROMA**2"
+              }
+            }
+          },
+          "src": "3",
+          "dst": "1",
+          "dst_connector": "IN_3",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "25*NPROMA**2",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZQLHS",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": null,
+                "dst_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "is_data_src": false,
+                "num_accesses": "25*NPROMA**2"
+              }
+            }
+          },
+          "src": "4",
+          "dst": "5",
+          "dst_connector": null,
+          "src_connector": "OUT_1"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "25*NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZSOLQB",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "25*NPROMA"
+              }
+            }
+          },
+          "src": "1",
+          "dst": "6",
+          "dst_connector": "ZSOLQB",
+          "src_connector": "OUT_1"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "25*NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZQLHS",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "25*NPROMA"
+              }
+            }
+          },
+          "src": "1",
+          "dst": "6",
+          "dst_connector": "ZQLHS",
+          "src_connector": "OUT_2"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "5*NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZFALLSINK",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "5*NPROMA"
+              }
+            }
+          },
+          "src": "1",
+          "dst": "6",
+          "dst_connector": "ZFALLSINK",
+          "src_connector": "OUT_3"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "25*NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZQLHS",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": null,
+                "dst_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "1",
+                      "end": "5",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "is_data_src": false,
+                "num_accesses": "25*NPROMA"
+              }
+            }
+          },
+          "src": "6",
+          "dst": "4",
+          "dst_connector": "IN_1",
+          "src_connector": "ZQLHS"
+        }
+      ],
+      "attributes": {
+        "nosync": false,
+        "instrument": "No_Instrumentation",
+        "symbol_instrument": "No_Instrumentation",
+        "symbol_instrument_condition": {
+          "string_data": "1",
+          "language": "CPP"
+        },
+        "executions": "0",
+        "dynamic_executions": true,
+        "ranges": {},
+        "location": {},
+        "is_collapsed": false
+      }
+    }
+  ],
+  "edges": [],
+  "collapsed": false,
+  "label": "",
+  "id": null,
+  "sdfg_list_id": 0,
+  "start_state": 0,
+  "dace_version": "0.15"
+}

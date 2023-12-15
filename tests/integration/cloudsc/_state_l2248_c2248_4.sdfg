@@ -1,0 +1,1270 @@
+{
+  "type": "SDFG",
+  "attributes": {
+    "name": "loop_body_35_cutout_cutout",
+    "arg_names": [],
+    "constants_prop": {},
+    "_arrays": {
+      "ZMF": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1"
+          ],
+          "total_size": "NPROMA",
+          "offset": [
+            "-1"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "NPROMA"
+          ],
+          "transient": false,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      },
+      "ZQXNM1": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1",
+            "NPROMA"
+          ],
+          "total_size": "5*NPROMA",
+          "offset": [
+            "-1",
+            "-1"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "NPROMA",
+            "5"
+          ],
+          "transient": false,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      },
+      "ZCONVSRCE": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1",
+            "NPROMA"
+          ],
+          "total_size": "5*NPROMA",
+          "offset": [
+            "-1",
+            "-1"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "NPROMA",
+            "5"
+          ],
+          "transient": false,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      },
+      "ZLCUST": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1",
+            "NPROMA"
+          ],
+          "total_size": "5*NPROMA",
+          "offset": [
+            "-1",
+            "-1"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "NPROMA",
+            "5"
+          ],
+          "transient": false,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      },
+      "ZLCUST_0": {
+        "type": "Array",
+        "attributes": {
+          "allow_conflicts": false,
+          "strides": [
+            "1",
+            "1"
+          ],
+          "total_size": "1",
+          "offset": [
+            "0",
+            "0"
+          ],
+          "may_alias": false,
+          "alignment": 0,
+          "start_offset": 0,
+          "optional": false,
+          "pool": false,
+          "dtype": "float64",
+          "shape": [
+            "1",
+            "1"
+          ],
+          "transient": true,
+          "storage": "Default",
+          "lifetime": "Scope",
+          "location": {},
+          "debuginfo": null
+        }
+      }
+    },
+    "symbols": {
+      "NPROMA": "int32",
+      "_for_it_33": "int32"
+    },
+    "instrument": "No_Instrumentation",
+    "global_code": {
+      "frame": {
+        "string_data": "",
+        "language": "CPP"
+      }
+    },
+    "init_code": {
+      "frame": {
+        "string_data": "",
+        "language": "CPP"
+      }
+    },
+    "exit_code": {
+      "frame": {
+        "string_data": "",
+        "language": "CPP"
+      }
+    },
+    "orig_sdfg": null,
+    "transformation_hist": [],
+    "logical_groups": [],
+    "openmp_sections": false,
+    "debuginfo": {
+      "type": "DebugInfo",
+      "start_line": 0,
+      "end_line": 0,
+      "start_column": 0,
+      "end_column": 0,
+      "filename": null
+    },
+    "_pgrids": {},
+    "_subarrays": {},
+    "_rdistrarrays": {},
+    "callback_mapping": {},
+    "is_collapsed": false,
+    "hash": "1f62c2b82a4abdcba02a409852c0a857579079533951c19f870a9de46de14c53"
+  },
+  "nodes": [
+    {
+      "type": "SDFGState",
+      "label": "_state_l2248_c2248_4",
+      "id": 0,
+      "collapsed": false,
+      "scope_dict": {
+        "-1": [
+          0,
+          1,
+          2,
+          3,
+          7,
+          9
+        ],
+        "1": [
+          4,
+          5,
+          6,
+          8
+        ]
+      },
+      "nodes": [
+        {
+          "type": "AccessNode",
+          "label": "ZMF",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 38,
+              "end_line": 38,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+            },
+            "data": "ZMF",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 0,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "MapEntry",
+          "label": "_state_l2248_c2248_4_map[_for_it_34=1:NPROMA + 1]",
+          "attributes": {
+            "label": "_state_l2248_c2248_4_map",
+            "params": [
+              "_for_it_34"
+            ],
+            "range": {
+              "type": "Range",
+              "ranges": [
+                {
+                  "start": "1",
+                  "end": "NPROMA",
+                  "step": "1",
+                  "tile": "1"
+                }
+              ]
+            },
+            "schedule": "Default",
+            "unroll": false,
+            "collapse": 1,
+            "debuginfo": null,
+            "is_collapsed": false,
+            "instrument": "No_Instrumentation",
+            "in_connectors": {
+              "IN_1": null,
+              "IN_2": null,
+              "IN_3": null
+            },
+            "out_connectors": {
+              "OUT_1": null,
+              "OUT_2": null,
+              "OUT_3": null
+            }
+          },
+          "id": 1,
+          "scope_entry": null,
+          "scope_exit": "5"
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZQXNM1",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 38,
+              "end_line": 38,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+            },
+            "data": "ZQXNM1",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 2,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZCONVSRCE",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 38,
+              "end_line": 38,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+            },
+            "data": "ZCONVSRCE",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 3,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZLCUST_0",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 1529,
+              "end_line": 1529,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/transformation/helpers.py"
+            },
+            "data": "ZLCUST_0",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 4,
+          "scope_entry": "1",
+          "scope_exit": "5"
+        },
+        {
+          "type": "MapExit",
+          "label": "_state_l2248_c2248_4_map[_for_it_34=1:NPROMA + 1]",
+          "attributes": {
+            "in_connectors": {
+              "IN_1": null,
+              "IN_ZLCUST": null
+            },
+            "out_connectors": {
+              "OUT_1": null,
+              "OUT_ZLCUST": null
+            }
+          },
+          "id": 5,
+          "scope_entry": "1",
+          "scope_exit": "5"
+        },
+        {
+          "type": "Tasklet",
+          "label": "T_l2250_c2250",
+          "attributes": {
+            "code": {
+              "string_data": "ZCONVSRCE_out_1 = (ZCONVSRCE_0_in_1 + ZLCUST_0_in_1)",
+              "language": "Python"
+            },
+            "state_fields": [],
+            "code_global": {
+              "string_data": "",
+              "language": "CPP"
+            },
+            "code_init": {
+              "string_data": "",
+              "language": "CPP"
+            },
+            "code_exit": {
+              "string_data": "",
+              "language": "CPP"
+            },
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 2250,
+              "end_line": 2250,
+              "start_column": 2250,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/cloudsc_runner_old.py"
+            },
+            "instrument": "No_Instrumentation",
+            "side_effects": null,
+            "ignored_symbols": [],
+            "label": "T_l2250_c2250",
+            "location": {},
+            "environments": [],
+            "in_connectors": {
+              "ZCONVSRCE_0_in_1": null,
+              "ZLCUST_0_in_1": null
+            },
+            "out_connectors": {
+              "ZCONVSRCE_out_1": null
+            }
+          },
+          "id": 6,
+          "scope_entry": "1",
+          "scope_exit": "5"
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZCONVSRCE",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 46,
+              "end_line": 46,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/fcdc_utils.py"
+            },
+            "data": "ZCONVSRCE",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 7,
+          "scope_entry": null,
+          "scope_exit": null
+        },
+        {
+          "type": "Tasklet",
+          "label": "T_l2248_c2248",
+          "attributes": {
+            "code": {
+              "string_data": "ZLCUST_out_1 = (ZMF_0_in_1 * ZQXNM1_0_in_1)",
+              "language": "Python"
+            },
+            "state_fields": [],
+            "code_global": {
+              "string_data": "",
+              "language": "CPP"
+            },
+            "code_init": {
+              "string_data": "",
+              "language": "CPP"
+            },
+            "code_exit": {
+              "string_data": "",
+              "language": "CPP"
+            },
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 2248,
+              "end_line": 2248,
+              "start_column": 2248,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/frontend/fortran/cloudsc_runner_old.py"
+            },
+            "instrument": "No_Instrumentation",
+            "side_effects": null,
+            "ignored_symbols": [],
+            "label": "T_l2248_c2248",
+            "location": {},
+            "environments": [],
+            "in_connectors": {
+              "ZMF_0_in_1": null,
+              "ZQXNM1_0_in_1": null
+            },
+            "out_connectors": {
+              "ZLCUST_out_1": null
+            }
+          },
+          "id": 8,
+          "scope_entry": "1",
+          "scope_exit": "5"
+        },
+        {
+          "type": "AccessNode",
+          "label": "ZLCUST",
+          "attributes": {
+            "setzero": false,
+            "debuginfo": {
+              "type": "DebugInfo",
+              "start_line": 607,
+              "end_line": 607,
+              "start_column": 0,
+              "end_column": 0,
+              "filename": "/mnt/c/Users/AlexWork/Desktop/Git/dace/dace/transformation/interstate/loop_to_map.py"
+            },
+            "data": "ZLCUST",
+            "instrument": "No_Instrumentation",
+            "instrument_condition": {
+              "string_data": "1",
+              "language": "CPP"
+            },
+            "in_connectors": {},
+            "out_connectors": {}
+          },
+          "id": 9,
+          "scope_entry": null,
+          "scope_exit": null
+        }
+      ],
+      "edges": [
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZMF",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "NPROMA"
+              }
+            }
+          },
+          "src": "0",
+          "dst": "1",
+          "dst_connector": "IN_1",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZQXNM1",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "NPROMA"
+              }
+            }
+          },
+          "src": "2",
+          "dst": "1",
+          "dst_connector": "IN_2",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZCONVSRCE",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "NPROMA"
+              }
+            }
+          },
+          "src": "3",
+          "dst": "1",
+          "dst_connector": "IN_3",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "1",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "data": "ZLCUST",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "is_data_src": false,
+                "num_accesses": "1"
+              }
+            }
+          },
+          "src": "4",
+          "dst": "5",
+          "dst_connector": "IN_ZLCUST",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "1",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZLCUST_0",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "1"
+              }
+            }
+          },
+          "src": "4",
+          "dst": "6",
+          "dst_connector": "ZLCUST_0_in_1",
+          "src_connector": null
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZCONVSRCE",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": null,
+                "dst_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "is_data_src": false,
+                "num_accesses": "NPROMA"
+              }
+            }
+          },
+          "src": "5",
+          "dst": "7",
+          "dst_connector": null,
+          "src_connector": "OUT_1"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "1",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZMF",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "1"
+              }
+            }
+          },
+          "src": "1",
+          "dst": "8",
+          "dst_connector": "ZMF_0_in_1",
+          "src_connector": "OUT_1"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "1",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZQXNM1",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "1"
+              }
+            }
+          },
+          "src": "1",
+          "dst": "8",
+          "dst_connector": "ZQXNM1_0_in_1",
+          "src_connector": "OUT_2"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "1",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZCONVSRCE",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "dst_subset": null,
+                "is_data_src": true,
+                "num_accesses": "1"
+              }
+            }
+          },
+          "src": "1",
+          "dst": "6",
+          "dst_connector": "ZCONVSRCE_0_in_1",
+          "src_connector": "OUT_3"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "NPROMA",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZLCUST",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": null,
+                "dst_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "1",
+                      "end": "NPROMA",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "is_data_src": false,
+                "num_accesses": "NPROMA"
+              }
+            }
+          },
+          "src": "5",
+          "dst": "9",
+          "dst_connector": null,
+          "src_connector": "OUT_ZLCUST"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "1",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZCONVSRCE",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": null,
+                "dst_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "_for_it_34",
+                      "end": "_for_it_34",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "_for_it_33",
+                      "end": "_for_it_33",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "is_data_src": false,
+                "num_accesses": "1"
+              }
+            }
+          },
+          "src": "6",
+          "dst": "5",
+          "dst_connector": "IN_1",
+          "src_connector": "ZCONVSRCE_out_1"
+        },
+        {
+          "type": "MultiConnectorEdge",
+          "attributes": {
+            "data": {
+              "type": "Memlet",
+              "attributes": {
+                "volume": "1",
+                "dynamic": false,
+                "subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "other_subset": null,
+                "data": "ZLCUST_0",
+                "wcr": null,
+                "debuginfo": null,
+                "wcr_nonatomic": false,
+                "allow_oob": false,
+                "src_subset": null,
+                "dst_subset": {
+                  "type": "Range",
+                  "ranges": [
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    },
+                    {
+                      "start": "0",
+                      "end": "0",
+                      "step": "1",
+                      "tile": "1"
+                    }
+                  ]
+                },
+                "is_data_src": false,
+                "num_accesses": "1"
+              }
+            }
+          },
+          "src": "8",
+          "dst": "4",
+          "dst_connector": null,
+          "src_connector": "ZLCUST_out_1"
+        }
+      ],
+      "attributes": {
+        "nosync": false,
+        "instrument": "No_Instrumentation",
+        "symbol_instrument": "No_Instrumentation",
+        "symbol_instrument_condition": {
+          "string_data": "1",
+          "language": "CPP"
+        },
+        "executions": "0",
+        "dynamic_executions": true,
+        "ranges": {},
+        "location": {},
+        "is_collapsed": false
+      }
+    }
+  ],
+  "edges": [],
+  "collapsed": false,
+  "label": "",
+  "id": null,
+  "sdfg_list_id": 0,
+  "start_state": 0,
+  "dace_version": "0.15"
+}

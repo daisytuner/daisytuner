@@ -1,0 +1,68 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+jobs:
+  launch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: iterative/setup-cml@v1
+      - uses: actions/checkout@v3
+      - name: Deploy runner on GCP
+        env:
+          REPO_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GOOGLE_APPLICATION_CREDENTIALS_DATA: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_DATA }}
+        run: |
+          cml runner launch \
+              --cloud=gcp \
+              --cloud-region=europe-west-1b \
+              --cloud-type=g2-standard-4 \
+              --labels=cml-gpu
+
+  tests:
+    needs: launch
+    runs-on: [self-hosted, cml-gpu]
+    timeout-minutes: 90
+    container:
+      image: docker://iterativeai/cml:0-dvc2-base1-gpu
+      options: --gpus all
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: 'true'
+      - uses: conda-incubator/setup-miniconda@v2
+        with:
+          python-version: 3.9
+          auto-update-conda: true
+      - name: Install Dependencies
+        shell: bash -l {0}
+        run: |
+          conda install -c anaconda mkl mkl-include
+          conda install -c conda-forge isl nlohmann_json
+      - name: Install Package
+        shell: bash -l {0}
+        run: |      
+          pip install git+https://github.com/spcl/dace.git@daisy
+          pip install -e .[dev,polyhedral]
+      - name: Lint with black
+        shell: bash -l {0}
+        run: |
+          black --check --verbose daisytuner/
+          black --check --verbose tests/
+      - name: Unit tests with pytest
+        shell: bash -l {0}
+        run: |
+          pytest --cov=daisytuner --cov-report=xml tests/unit
+      - name: Intergration tests with pytest
+        shell: bash -l {0}
+        run: |
+          pytest tests/integration
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
