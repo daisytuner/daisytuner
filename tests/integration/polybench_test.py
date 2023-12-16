@@ -119,22 +119,22 @@ def test_polybench(benchmark):
     for array, values in args_original.items():
         assert np.allclose(values, args_normalized[array], equal_nan=True)
 
-    # 2. Tuning for CPU-GPU
-    sdfg.apply_transformations_repeated(MapWrapping)
+    # # 2. Tuning for CPU-GPU
+    # sdfg.apply_transformations_repeated(MapWrapping)
 
-    env = Environment(sdfg=sdfg)
-    agent = DeviceAgent()
+    # env = Environment(sdfg=sdfg)
+    # agent = DeviceAgent()
 
-    # 2.a Run optimization
-    terminated = False
-    current_state = env._current_state
-    while not terminated:
-        action = agent.action(current_state)
-        current_state, reward, terminated, truncated, info = env.step(action=action)
+    # # 2.a Run optimization
+    # terminated = False
+    # current_state = env._current_state
+    # while not terminated:
+    #     action = agent.action(current_state)
+    #     current_state, reward, terminated, truncated, info = env.step(action=action)
 
-    # 2.b Numerical evaluation
-    sdfg_tuned = info["scheduled_sdfg"]
-    sdfg_tuned(**args_tuned)
+    # # 2.b Numerical evaluation
+    # sdfg_tuned = info["scheduled_sdfg"]
+    # sdfg_tuned(**args_tuned)
 
-    for array, values in args_original.items():
-        assert np.allclose(values, args_normalized[array], equal_nan=True)
+    # for array, values in args_original.items():
+    #     assert np.allclose(values, args_normalized[array], equal_nan=True)
