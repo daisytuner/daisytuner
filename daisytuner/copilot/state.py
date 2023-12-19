@@ -5,8 +5,6 @@ import networkx as nx
 
 from typing import List, Dict, Union
 
-from pyvis.network import Network
-
 from daisytuner.analysis.gom.graph_of_maps import (
     GraphOfMaps,
     BeginState,
