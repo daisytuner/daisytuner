@@ -13,7 +13,7 @@ from collections import Counter
 from typing import Any, Dict, List
 from pyvis.network import Network
 
-from daisytuner.passes.map_expanded_form import MapExpandedForm
+from daisytuner.normalization.map_expanded_form import MapExpandedForm
 
 _CTYPES = {
     None: "void",

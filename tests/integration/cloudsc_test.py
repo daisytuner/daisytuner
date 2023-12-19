@@ -6,9 +6,9 @@ import numpy as np
 
 from collections import Counter
 
-from daisytuner.device_mapping import Environment
-from daisytuner.device_mapping.agents import DeviceAgent
-from daisytuner.pipelines import APrioriMapNestNormalization
+from daisytuner.copilot import Environment
+from daisytuner.copilot.agents import DeviceAgent
+from daisytuner.normalization import APrioriMapNestNormalization
 from daisytuner.profiling.measure import random_arguments
 
 from pathlib import Path

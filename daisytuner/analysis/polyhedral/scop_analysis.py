@@ -19,7 +19,7 @@ from daisytuner.analysis.polyhedral.sympy2isl import (
     SympyToPwAff,
 )
 from daisytuner.analysis.polyhedral.scop import Scop
-from daisytuner.pipelines.loopification import Loopification
+from daisytuner.normalization.loopification import Loopification
 
 
 class ScopAnalysis:
