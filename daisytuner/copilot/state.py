@@ -69,6 +69,9 @@ class State:
     def terminated(self) -> bool:
         return self._selected_node == None
 
+    def valid(self) -> bool:
+        return True
+
     def _next_array(self) -> str:
         index = self._arrays.index(self._selected_array)
         self._selected_array = self._arrays[(index + 1) % len(self._arrays)]

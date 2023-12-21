@@ -49,13 +49,18 @@ class GPUEncoding:
 
     NUM_FEATURES = 7
 
-    def __init__(self, gpu_info: Dict) -> None:
+    def __init__(self, gpu_info: Dict = None) -> None:
         self._data = None
         self._gpu_info = gpu_info
 
     def encode(self) -> torch.tensor:
         if self._data is not None:
             return self._data
+
+        if not self._gpu_info:
+            # Gather benchmarking data
+            bench = Benchmarking()
+            self._gpu_info = bench.analyze()["gpu"]
 
         vec = np.zeros((GPUEncoding.NUM_FEATURES,), dtype=np.float32)
         vec[0] = self._gpu_info["devices"]

@@ -118,6 +118,19 @@ class MapNestEncoding:
                 self._params.append(node.map.params[0])
 
     @staticmethod
+    def preprocess(sdfg: dace.SDFG):
+        results = {}
+        pipeline = MapExpandedForm()
+        pipeline.apply_pass(sdfg, results)
+
+        for desc in sdfg.arrays.values():
+            desc.storage = dace.StorageType.Default
+
+        for node in sdfg.start_state.nodes():
+            if isinstance(node, dace.nodes.MapEntry):
+                node.map.schedule = dace.ScheduleType.Default
+
+    @staticmethod
     def can_be_encoded(sdfg: dace.SDFG, symbol_values: Dict = None) -> bool:
         if not MapExpandedForm.is_expanded_form(sdfg):
             return False

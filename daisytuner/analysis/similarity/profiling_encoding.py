@@ -8,7 +8,6 @@ from pathlib import Path
 
 from abc import ABC, abstractmethod
 
-from daisytuner.analysis.similarity.profiling_features.targets import TARGET_GROUPS
 from daisytuner.profiling.likwid_helpers import cpu_codename, gpu_codename
 
 
@@ -39,7 +38,6 @@ class ProfilingEncoding(ABC):
         instrumentation = Profiling(
             sdfg=self._sdfg,
             device=self._device,
-            groups=TARGET_GROUPS[self._codename],
             cache_path=self._cache_path,
             hostname=self._hostname,
             codename=self._codename,

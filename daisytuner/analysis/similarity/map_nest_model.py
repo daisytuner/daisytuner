@@ -3,20 +3,24 @@ from __future__ import annotations
 
 import torch
 import dace
+import platform
 import pytorch_lightning as pl
 
 from pathlib import Path
+from typing import Union
 
 from torch_geometric.nn import DeepGCNLayer, TransformerConv, GlobalAttention
 
+from daisytuner.analysis.similarity.map_nest import MapNest
 from daisytuner.analysis.similarity.map_nest_encoding import MapNestEncoding
 from daisytuner.analysis.similarity.device_encoding import CPUEncoding, GPUEncoding
-
+from daisytuner.analysis.similarity.profiling_encoding import ProfilingEncoding
 from daisytuner.analysis.similarity.profiling_features.norm_coeffs import *
 from daisytuner.analysis.similarity.profiling_features.targets import (
     TARGETS,
     TARGETS_GPU,
 )
+from daisytuner.profiling.likwid_helpers import cpu_codename, gpu_codename
 
 
 class MapNestModel(pl.LightningModule):
@@ -26,7 +30,8 @@ class MapNestModel(pl.LightningModule):
     def __init__(
         self,
         create_key: object,
-        device: dace.DeviceType,
+        model_type: dace.DeviceType,
+        device_encoding: Union[CPUEncoding, GPUEncoding],
         node_features: int,
         edge_features: int,
         device_features: int,
@@ -36,6 +41,9 @@ class MapNestModel(pl.LightningModule):
     ):
         assert create_key == MapNestModel.__create_key
         super().__init__()
+
+        self._model_type = model_type
+        self._device_encoding = device_encoding
 
         heads = 4
         assert hidden_channels % heads == 0
@@ -118,7 +126,7 @@ class MapNestModel(pl.LightningModule):
         self.loss = torch.nn.L1Loss()
 
         # Normalization coefficients
-        if device == dace.DeviceType.CPU:
+        if model_type == dace.DeviceType.CPU:
             self.register_buffer(
                 "DEVICE_MEAN", torch.tensor(ARCHS_MEAN_CPU, dtype=torch.float32)
             )
@@ -138,7 +146,7 @@ class MapNestModel(pl.LightningModule):
             self.register_buffer(
                 "TARGETS_STD", torch.tensor(TARGETS_STD_CPU, dtype=torch.float32) + 1e-6
             )
-        elif device == dace.DeviceType.GPU:
+        elif model_type == dace.DeviceType.GPU:
             self.register_buffer(
                 "DEVICE_MEAN", torch.tensor(ARCHS_MEAN_GPU, dtype=torch.float32)
             )
@@ -167,9 +175,11 @@ class MapNestModel(pl.LightningModule):
         model_path: Path = None,
     ) -> MapNestModel:
         if device == dace.DeviceType.CPU:
+            device_encoding = CPUEncoding()
             model = MapNestModel(
                 create_key=MapNestModel.__create_key,
-                device=device,
+                model_type=device,
+                device_encoding=device_encoding,
                 node_features=MapNestEncoding.node_dimensions(),
                 edge_features=MapNestEncoding.edge_dimensions(),
                 device_features=CPUEncoding.dimensions(),
@@ -177,9 +187,11 @@ class MapNestModel(pl.LightningModule):
                 num_targets=len(TARGETS),
             )
         elif device == dace.DeviceType.GPU:
+            device_encoding = GPUEncoding()
             model = MapNestModel(
                 create_key=MapNestModel.__create_key,
-                device=device,
+                model_type=device,
+                device_encoding=device_encoding,
                 node_features=MapNestEncoding.node_dimensions(),
                 edge_features=MapNestEncoding.edge_dimensions(),
                 device_features=GPUEncoding.dimensions(),
@@ -214,6 +226,36 @@ class MapNestModel(pl.LightningModule):
 
         return model
 
+    def predict(self, map_nest: MapNest, profiling_features: bool = False):
+        cutout = map_nest.as_cutout()
+        MapNestEncoding.preprocess(cutout)
+
+        # Static features
+        static_encoding = MapNestEncoding(cutout)
+        data = static_encoding.encode()
+
+        # Device features
+        data.device_features = self._device_encoding.encode()
+
+        # Profiling features
+        if profiling_features:
+            host = platform.node()
+            codename = (
+                cpu_codename()
+                if self._model_type == dace.DeviceType.CPU
+                else gpu_codename()
+            )
+            profiling_encoding = ProfilingEncoding.create(
+                sdfg=cutout, device=self._model_type, hostname=host, codename=codename
+            )
+            data.profiling_features = profiling_encoding.encode()
+
+        preds, *rem = self.forward(data)
+        preds = (preds * self.TARGETS_STD) + self.TARGETS_MEAN
+
+        preds = preds.detach().numpy()[0]
+        return (preds, *rem)
+
     def forward(self, data):
         # 1. Compute static embedding from static features
         static_embedding, node_embeddings = self.backbone(
@@ -238,7 +280,7 @@ class MapNestModel(pl.LightningModule):
             ) / self.COUNTERS_STD
             profiling_embedding = self.profiling_encoder(profiling_featues)
 
-        # 4. Compute final embedding
+        # 5. Compute final embedding
         upper_embedding = torch.hstack([lower_embedding, profiling_embedding])
         upper_embedding = self.neck_upper(upper_embedding)
 

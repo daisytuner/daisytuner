@@ -29,6 +29,7 @@ SPECIAL_COUNTERS = set(
         "CPU_CYCLES",
         "ACTUAL_CPU_CLOCK",
         "MAX_CPU_CLOCK",
+        "RETIRED_INSTRUCTIONS",
     ]
 )
 

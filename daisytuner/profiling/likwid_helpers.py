@@ -64,6 +64,8 @@ def likwid_groups(device: str) -> Dict[str, Any]:
         gpu_codename = "nvidia_cc_ge_7" if gpu["ccapMajor"] >= 7 else "nvidia_cc_le_7"
         gpu_groups = LIKWID_GROUPS[gpu_codename]
         return gpu_groups
+    else:
+        raise ValueError(f"Invalid device type {device}")
 
 
 LIKWID_GROUPS = {

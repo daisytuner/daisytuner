@@ -4,6 +4,7 @@ import numpy as np
 
 from daisytuner.copilot import Environment, Action
 from daisytuner.copilot.agents import HostAgent
+from daisytuner.copilot.rewards import Validity
 
 
 def test_one_map():
@@ -22,7 +23,7 @@ def test_one_map():
     sdfg = sdfg_one_map.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    env = Environment(sdfg=sdfg, reward_function=Validity())
     agent = HostAgent()
 
     terminated = False
@@ -39,9 +40,7 @@ def test_one_map():
         else:
             assert reward == 0.0
 
-    assert "scheduled_sdfg" in info
-
-    sdfg_opt = info["scheduled_sdfg"]
+    sdfg_opt = current_state.generate_schedule()
 
     A = np.random.random((1024, 128)).astype(np.float64)
     B = np.random.random((128,)).astype(np.float64)
@@ -76,7 +75,7 @@ def test_two_maps():
     sdfg = sdfg_two_maps.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    env = Environment(sdfg=sdfg, reward_function=Validity())
     agent = HostAgent()
 
     terminated = False
@@ -93,9 +92,7 @@ def test_two_maps():
         else:
             assert reward == 0.0
 
-    assert "scheduled_sdfg" in info
-
-    sdfg_opt = info["scheduled_sdfg"]
+    sdfg_opt = current_state.generate_schedule()
 
     A = np.random.random((1024, 128)).astype(np.float64)
     B = np.random.random((128,)).astype(np.float64)
@@ -130,7 +127,7 @@ def test_two_states():
     sdfg = sdfg_two_states.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    env = Environment(sdfg=sdfg, reward_function=Validity())
     agent = HostAgent()
 
     terminated = False
@@ -147,9 +144,7 @@ def test_two_states():
         else:
             assert reward == 0.0
 
-    assert "scheduled_sdfg" in info
-
-    sdfg_opt = info["scheduled_sdfg"]
+    sdfg_opt = current_state.generate_schedule()
 
     A = np.random.random((1024, 128)).astype(np.float64)
     B = np.random.random((128,)).astype(np.float64)
