@@ -1,0 +1,1 @@
+{"DATA": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.297]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [1070246]}, "MAX_CPU_CLOCK": {"0": [810327]}, "RETIRED_INSTRUCTIONS": {"0": [400025]}, "CPU_CLOCKS_UNHALTED": {"0": [455703]}, "LS_DISPATCH_LOADS": {"0": [146982]}, "LS_DISPATCH_STORES": {"0": [1251920]}}}}}}

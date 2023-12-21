@@ -1,0 +1,1 @@
+{"L2": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.128]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INST_RETIRED": {"0": [399773]}, "CPU_CYCLES": {"0": [208961]}, "L1D_CACHE_REFILL": {"0": [5326]}, "L1D_CACHE_WB": {"0": [2266]}, "L1I_CACHE_REFILL": {"0": [184]}}}}}}

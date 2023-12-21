@@ -1,0 +1,1 @@
+{"TLB": {"durations": {"(0, 0, -1)": {"Timer": {"0": [1.953]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [4848388]}, "MAX_CPU_CLOCK": {"0": [4348050]}, "RETIRED_INSTRUCTIONS": {"0": [5257188]}, "DATA_CACHE_ACCESSES": {"0": [2142075]}, "L1_DTLB_MISS_ANY_L2_HIT": {"0": [59]}, "L1_DTLB_MISS_ANY_L2_MISS": {"0": [2073]}}}}}}

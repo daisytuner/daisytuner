@@ -1,0 +1,1 @@
+{"FLOPS_DP": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.068]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INST_RETIRED": {"0": [235662]}, "CPU_CYCLES": {"0": [119435]}, "FP_DP_FIXED_OPS_SPEC": {"0": [65548]}, "FP_DP_SCALE_OPS_SPEC": {"0": [0]}}}}}}

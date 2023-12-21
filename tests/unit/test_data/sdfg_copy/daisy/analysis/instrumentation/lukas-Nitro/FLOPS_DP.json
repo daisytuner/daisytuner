@@ -1,0 +1,1 @@
+{"FLOPS_DP": {"durations": {"(0, 0, -1)": {"Timer": {"0": [1.044]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [4667628]}, "MAX_CPU_CLOCK": {"0": [3628185]}, "RETIRED_INSTRUCTIONS": {"0": [5255973]}, "CPU_CLOCKS_UNHALTED": {"0": [3180863]}, "RETIRED_SSE_AVX_FLOPS_ALL": {"0": [10]}, "MERGE": {"0": [0]}}}}}}

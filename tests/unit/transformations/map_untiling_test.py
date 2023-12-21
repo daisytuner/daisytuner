@@ -5,7 +5,7 @@ import numpy as np
 
 from dace.transformation.dataflow import MapTiling, MapExpansion, MapInterchange
 from daisytuner.transformations.map_untiling import MapUntiling
-from daisytuner.profiling.measure import random_arguments
+from daisytuner.profiling.helpers import random_arguments
 
 N, M, K = [dace.symbol(k) for k in "NMK"]
 

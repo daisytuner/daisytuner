@@ -1,0 +1,1 @@
+{"BRANCH": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.144]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INST_RETIRED": {"0": [399486]}, "CPU_CYCLES": {"0": [232444]}, "BR_PRED": {"0": [66758]}, "BR_MIS_PRED": {"0": [138]}}}}}}

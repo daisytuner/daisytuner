@@ -9,7 +9,7 @@ from collections import Counter
 from daisytuner.copilot import Environment
 from daisytuner.copilot.agents import DeviceAgent
 from daisytuner.normalization import APrioriMapNestNormalization
-from daisytuner.profiling.measure import random_arguments
+from daisytuner.profiling.helpers import random_arguments
 from daisytuner.transformations import MapWrapping
 
 from pathlib import Path

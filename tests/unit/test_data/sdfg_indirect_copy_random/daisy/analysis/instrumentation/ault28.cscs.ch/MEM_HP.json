@@ -1,0 +1,1 @@
+{"MEM_HP": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.514]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"FP_HP_FIXED_OPS_HPEC": {"0": [0]}, "FP_HP_SCALE_OPS_HPEC": {"0": [0]}, "L2D_CACHE_REFILL": {"0": [6022]}, "L2D_CACHE_WB": {"0": [2625]}, "L2D_SWAP_DM": {"0": [737]}, "L2D_CACHE_MIBMCH_PRF": {"0": [156]}}}}}}

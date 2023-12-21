@@ -1,0 +1,1 @@
+{"MEM_DP": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.523]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"FP_DP_FIXED_OPS_SPEC": {"0": [14]}, "FP_DP_SCALE_OPS_SPEC": {"0": [0]}, "L2D_CACHE_REFILL": {"0": [6020]}, "L2D_CACHE_WB": {"0": [2551]}, "L2D_SWAP_DM": {"0": [703]}, "L2D_CACHE_MIBMCH_PRF": {"0": [179]}}}}}}

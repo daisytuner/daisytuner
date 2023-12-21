@@ -1,0 +1,1 @@
+{"NUMA": {"durations": {"(0, 0, -1)": {"Timer": {"0": [1.013]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [0]}, "MAX_CPU_CLOCK": {"0": [0]}, "DATA_CACHE_REFILLS_LOCAL_ALL": {"0": [60464]}, "DATA_CACHE_REFILLS_REMOTE_ALL": {"0": [8452]}, "HWPREF_DATA_CACHE_FILLS_LOCAL_ALL": {"0": [9039]}, "HWPREF_DATA_CACHE_FILLS_REMOTE_ALL": {"0": [51632]}}}}}}

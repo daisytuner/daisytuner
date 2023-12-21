@@ -1,0 +1,1 @@
+{"L3": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.716]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [399875]}, "CPU_CLK_UNHALTED_CORE": {"0": [1335863]}, "CPU_CLK_UNHALTED_REF": {"0": [1216240]}, "L2_LINES_IN_ALL": {"0": [56266]}, "L2_TRANS_L2_WB": {"0": [8255]}}}}}}

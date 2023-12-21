@@ -1,0 +1,1 @@
+{"ICACHE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.518]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INST_RETIRED": {"0": [399238]}, "CPU_CYCLES": {"0": [909624]}, "L1I_CACHE": {"0": [14769]}, "L1I_CACHE_REFILL": {"0": [182]}}}}}}

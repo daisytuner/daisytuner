@@ -1,0 +1,1 @@
+{"BRANCH": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.71]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [399902]}, "CPU_CLK_UNHALTED_CORE": {"0": [1331759]}, "CPU_CLK_UNHALTED_REF": {"0": [1212580]}, "BR_INST_RETIRED_ALL_BRANCHES": {"0": [67039]}, "BR_MISP_RETIRED_ALL_BRANCHES": {"0": [65]}}}}}}

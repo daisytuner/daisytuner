@@ -16,7 +16,7 @@ from tqdm import tqdm
 from typing import Dict, List
 
 from daisytuner.analysis.similarity import MapNest
-from daisytuner.profiling.measure import measure
+from daisytuner.profiling.helpers import measure
 
 from daisytuner.optimizer.evolutionary.schedule_space import (
     ScheduleSpace,

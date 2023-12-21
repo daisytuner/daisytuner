@@ -1,0 +1,1 @@
+{"MEM": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.075]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INST_RETIRED": {"0": [236195]}, "CPU_CYCLES": {"0": [126352]}, "L2D_CACHE_REFILL": {"0": [3343]}, "L2D_CACHE_WB": {"0": [1676]}, "L2D_SWAP_DM": {"0": [195]}, "L2D_CACHE_MIBMCH_PRF": {"0": [26]}}}}}}

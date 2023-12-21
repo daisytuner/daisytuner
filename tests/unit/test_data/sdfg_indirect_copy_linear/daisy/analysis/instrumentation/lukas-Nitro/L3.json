@@ -1,0 +1,1 @@
+{"L3": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.143]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [895150]}, "MAX_CPU_CLOCK": {"0": [695838]}, "RETIRED_INSTRUCTIONS": {"0": [399989]}, "CPU_CLOCKS_UNHALTED": {"0": [315455]}, "L2_PF_HIT_IN_L3": {"0": [171]}, "L2_PF_MISS_IN_L3": {"0": [20323]}, "L2_CACHE_MISS_AFTER_L1_MISS": {"0": [2982]}}}}}}

@@ -7,8 +7,6 @@ import numpy as np
 from daisytuner.analysis.performance_modeling import DeepBoatHullModel
 from daisytuner.analysis.similarity import MapNestModel
 
-from daisytuner.profiling.measure import measure
-
 
 def test_copy_cpu():
     """

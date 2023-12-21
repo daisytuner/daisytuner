@@ -1,0 +1,1 @@
+{"ICACHE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [4.084]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [5255142]}, "CPU_CLK_UNHALTED_CORE": {"0": [8047714]}, "CPU_CLK_UNHALTED_REF": {"0": [7317660]}, "ICACHE_ACCESSES": {"0": [11978]}, "ICACHE_MISSES": {"0": [388]}}}}}}

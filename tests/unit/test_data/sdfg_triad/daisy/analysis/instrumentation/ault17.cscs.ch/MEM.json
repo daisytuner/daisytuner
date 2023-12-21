@@ -1,0 +1,1 @@
+{"MEM": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.244]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [0]}, "MAX_CPU_CLOCK": {"0": [0]}, "RETIRED_INSTRUCTIONS": {"0": [235423]}, "CPU_CLOCKS_UNHALTED": {"0": [401427]}, "DRAM_CHANNEL_0": {"0": [0]}, "DRAM_CHANNEL_1": {"0": [0]}}}}}}

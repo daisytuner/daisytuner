@@ -1,0 +1,1 @@
+{"CPI": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.334]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [1034411]}, "MAX_CPU_CLOCK": {"0": [850122]}, "RETIRED_INSTRUCTIONS": {"0": [399416]}, "CPU_CLOCKS_UNHALTED": {"0": [500496]}, "RETIRED_UOPS": {"0": [364074]}}}}}}

@@ -1,57 +1,31 @@
 # Copyright 2022-2023 ETH Zurich and the Daisytuner authors.
-from typing import List
+import re
+import dace
+import platform
+import importlib
+
+from typing import Dict
+
+from daisytuner.profiling.metrics.metric import Metric
+from daisytuner.profiling.likwid_helpers import cpu_codename
 
 
 class MetricsFactory:
-    @classmethod
-    def create(cls, arch: str, groups: List[str]):
-        if arch == "broadwellEP":
-            from daisytuner.profiling.metrics.broadwellEP_metrics import (
-                BroadwellEPMetrics,
-            )
-
-            return BroadwellEPMetrics(groups=groups)
-        elif arch == "haswellEP":
-            from daisytuner.profiling.metrics.haswellEP_metrics import (
-                HaswellEPMetrics,
-            )
-
-            return HaswellEPMetrics(groups=groups)
-        elif arch == "skylake":
-            from daisytuner.profiling.metrics.skylakeX_metrics import (
-                SkylakeMetrics,
-            )
-
-            return SkylakeMetrics(groups=groups)
-        elif arch == "skylakeX":
-            from daisytuner.profiling.metrics.skylakeX_metrics import (
-                SkylakeXMetrics,
-            )
-
-            return SkylakeXMetrics(groups=groups)
-        elif arch == "zen":
-            from daisytuner.profiling.metrics.zen_metrics import (
-                ZenMetrics,
-            )
-
-            return ZenMetrics(groups=groups)
-        elif arch == "zen2":
-            from daisytuner.profiling.metrics.zen2_metrics import (
-                Zen2Metrics,
-            )
-
-            return Zen2Metrics(groups=groups)
-        elif arch == "zen3":
-            from daisytuner.profiling.metrics.zen3_metrics import (
-                Zen3Metrics,
-            )
-
-            return Zen3Metrics(groups=groups)
-        elif arch == "nvidia_cc_ge_7":
-            from daisytuner.profiling.metrics.nvidia_cc_ge_7_metrics import (
-                NVIDIACCGE7Metrics,
-            )
-
-            return NVIDIACCGE7Metrics(groups=groups)
+    @staticmethod
+    def create(
+        metric: str,
+        sdfg: dace.SDFG,
+        hostname: str = platform.node(),
+        codename: str = cpu_codename(),
+        cache: Dict = None,
+    ) -> Metric:
+        if sum(1 for c in metric if c.islower()) > 0:
+            metric_module_name = re.sub(r"(?<!^)(?=[A-Z])", "_", metric).lower()
         else:
-            assert False
+            metric_module_name = metric.lower()
+
+        metric_module = importlib.import_module(
+            f"daisytuner.profiling.metrics.{codename}.{metric_module_name}"
+        )
+        metric_class = getattr(metric_module, metric)
+        return metric_class(sdfg=sdfg, hostname=hostname, cache=cache)

@@ -51,8 +51,9 @@ jobs:
       - name: Install Package
         shell: bash -l {0}
         run: |      
-          pip install git+https://github.com/spcl/dace.git@daisy
           pip install -e .[dev,polyhedral]
+          pip uninstall -y dace
+          pip install git+https://github.com/spcl/dace.git@daisy
       - name: Lint with black
         shell: bash -l {0}
         run: |

@@ -1,0 +1,1 @@
+{"L2": {"durations": {"(0, 0, -1)": {"Timer": {"0": [1.181]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [5229268]}, "MAX_CPU_CLOCK": {"0": [4062663]}, "RETIRED_INSTRUCTIONS": {"0": [5255974]}, "CPU_CLOCKS_UNHALTED": {"0": [3651939]}, "REQUESTS_TO_L2_GRP1_ALL_NO_PF": {"0": [266045]}, "L2_PF_HIT_IN_L2": {"0": [212000]}}}}}}

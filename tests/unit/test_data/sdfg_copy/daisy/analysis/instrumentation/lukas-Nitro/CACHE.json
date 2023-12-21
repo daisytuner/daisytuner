@@ -1,0 +1,1 @@
+{"CACHE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.979]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [4375121]}, "MAX_CPU_CLOCK": {"0": [3400452]}, "RETIRED_INSTRUCTIONS": {"0": [5256001]}, "CPU_CLOCKS_UNHALTED": {"0": [2907235]}, "DATA_CACHE_ACCESSES": {"0": [2113822]}, "DATA_CACHE_REFILLS_ALL": {"0": [64815]}}}}}}

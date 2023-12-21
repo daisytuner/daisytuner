@@ -1,0 +1,1 @@
+{"L2": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.799]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [400075]}, "CPU_CLK_UNHALTED_CORE": {"0": [1338731]}, "CPU_CLK_UNHALTED_REF": {"0": [1217980]}, "L1D_REPLACEMENT": {"0": [79495]}, "L2_TRANS_L1D_WB": {"0": [2504]}, "ICACHE_MISSES": {"0": [373]}}}}}}

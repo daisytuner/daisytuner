@@ -1,0 +1,1 @@
+{"HA": {"durations": {"(0, 0, -1)": {"Timer": {"0": [4.072]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [5255167]}, "CPU_CLK_UNHALTED_CORE": {"0": [8036069]}, "CPU_CLK_UNHALTED_REF": {"0": [7306960]}, "IMC_READS_NORMAL": {"0": [0, 0]}, "BYPASS_IMC_TAKEN": {"0": [0, 0]}, "IMC_WRITES_ALL": {"0": [0, 0]}}}}}}

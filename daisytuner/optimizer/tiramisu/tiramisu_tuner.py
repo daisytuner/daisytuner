@@ -1,6 +1,7 @@
 # Copyright 2022-2023 ETH Zurich and the Daisytuner authors.
 import os
 import sys
+import copy
 import dace
 import json
 import sympy
@@ -10,13 +11,12 @@ from pathlib import Path
 from typing import List, Dict, Tuple
 from tqdm import tqdm
 
-from daisytuner.analysis.similarity import MapNest
 from daisytuner.optimizer.cutout_tuner import CutoutTuner
 from daisytuner.optimizer.evolutionary.schedule_space import (
     _arrays,
     ScheduleSpace,
 )
-from daisytuner.profiling.measure import random_arguments, measure
+from daisytuner.profiling.helpers import measure
 
 
 class TiramisuTuner(CutoutTuner):
@@ -85,9 +85,12 @@ class TiramisuTuner(CutoutTuner):
         best_state = (None, None, cutout)
 
         cutout.instrument = dace.InstrumentationType.Timer
-        best_runtime, best_process_time, _ = measure(
-            cutout, arguments=arguments, measurements=1
-        )
+
+        report = measure(cutout, arguments=copy.deepcopy(arguments))
+        best_runtime = next(
+            next(report.durations[(0, -1, -1)].values().__iter__()).values().__iter__()
+        )[0]
+
         cutout.instrument = dace.InstrumentationType.No_Instrumentation
 
         evaluated = 0
@@ -99,16 +102,17 @@ class TiramisuTuner(CutoutTuner):
 
             candidate = state[0]
             candidate.instrument = dace.InstrumentationType.Timer
-            runtime, process_time, _ = measure(
-                candidate,
-                arguments=arguments,
-                measurements=1,
-                timeout=best_process_time * 1.5,
-            )
+
+            report = measure(candidate, arguments=copy.deepcopy(arguments))
+            runtime = next(
+                next(report.durations[(0, -1, -1)].values().__iter__())
+                .values()
+                .__iter__()
+            )[0]
+
             candidate.instrument = dace.InstrumentationType.No_Instrumentation
             if best_runtime / runtime > 1.1:
                 best_runtime = runtime
-                best_process_time = process_time
                 best_state = (desc, score, state[0])
 
             evaluated += 1

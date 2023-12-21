@@ -1,0 +1,1 @@
+{"ENERGY": {"durations": {"(0, 0, -1)": {"Timer": {"0": [1.013]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [4442736]}, "MAX_CPU_CLOCK": {"0": [3452163]}, "RETIRED_INSTRUCTIONS": {"0": [5255953]}, "CPU_CLOCKS_UNHALTED": {"0": [3040004]}, "RAPL_CORE_ENERGY": {"0": [0]}, "RAPL_PKG_ENERGY": {"0": [0]}}}}}}

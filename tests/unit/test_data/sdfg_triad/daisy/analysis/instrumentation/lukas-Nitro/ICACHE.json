@@ -1,0 +1,1 @@
+{"ICACHE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.155]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [878163]}, "MAX_CPU_CLOCK": {"0": [903573]}, "RETIRED_INSTRUCTIONS": {"0": [236014]}, "ICACHE_FETCHES": {"0": [2655]}, "ICACHE_L2_REFILLS": {"0": [525]}, "ICACHE_SYSTEM_REFILLS": {"0": [685]}}}}}}

@@ -1,0 +1,1 @@
+{"DIVIDE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.241]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"ACTUAL_CPU_CLOCK": {"0": [0]}, "MAX_CPU_CLOCK": {"0": [0]}, "RETIRED_INSTRUCTIONS": {"0": [235488]}, "CPU_CLOCKS_UNHALTED": {"0": [397041]}, "DIV_OP_COUNT": {"0": [6]}, "DIV_BUSY_CYCLES": {"0": [752]}}}}}}

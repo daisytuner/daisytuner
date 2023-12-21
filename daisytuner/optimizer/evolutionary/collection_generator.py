@@ -12,7 +12,7 @@ from tqdm import tqdm
 from pathlib import Path
 from typing import List
 
-from daisytuner.profiling.measure import (
+from daisytuner.profiling.helpers import (
     measure,
     arguments_from_data_report,
     create_data_report,
@@ -20,8 +20,8 @@ from daisytuner.profiling.measure import (
 )
 
 from daisytuner.analysis.similarity import MapNest
-from daisytuner.transfer_tuning.evolutionary.evolutionary_tuner import EvolutionaryTuner
-from daisytuner.transfer_tuning.evolutionary.nearest_neighbors_sampler import (
+from daisytuner.optimizer.evolutionary.evolutionary_tuner import EvolutionaryTuner
+from daisytuner.optimizer.evolutionary.nearest_neighbors_sampler import (
     NearestNeighborsSampler,
 )
 

@@ -1,0 +1,1 @@
+{"FP_PIPE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.144]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INST_RETIRED": {"0": [400069]}, "CPU_CYCLES": {"0": [233058]}, "FLA_VAL": {"0": [376]}, "FLA_VAL_PRD_CNT": {"0": [3968]}, "FLB_VAL": {"0": [216]}, "FLB_VAL_PRD_CNT": {"0": [3456]}}}}}}

@@ -1,0 +1,1 @@
+{"TOFU": {"durations": {"(0, 0, -1)": {"Timer": {"0": [2.075]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INST_RETIRED": {"0": [5254433]}, "CPU_CYCLES": {"0": [3265207]}, "BUS_READ_TOTAL_TOFU": {"0": [0]}, "BUS_WRITE_TOTAL_TOFU": {"0": [0]}}}}}}

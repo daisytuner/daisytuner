@@ -32,7 +32,7 @@ from dace.transformation.optimizer import Optimizer
 from daisytuner.analysis.similarity.map_nest import MapNest
 from daisytuner.analysis.similarity.map_nest_model import MapNestModel
 from daisytuner.optimizer.cutout_tuner import CutoutTuner
-from daisytuner.profiling.measure import random_arguments, measure
+from daisytuner.profiling.helpers import random_arguments, measure
 
 TT_API_URI = "https://tune-bhqsvyw3sa-uc.a.run.app/"
 

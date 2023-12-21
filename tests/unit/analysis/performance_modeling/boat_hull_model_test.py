@@ -5,7 +5,6 @@ import math
 import numpy as np
 
 from daisytuner.analysis.performance_modeling import BoatHullModel
-from daisytuner.profiling.measure import measure
 
 
 # def test_copy_cpu():

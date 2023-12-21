@@ -1,0 +1,1 @@
+{"L3CACHE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.326]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [400070]}, "CPU_CLK_UNHALTED_CORE": {"0": [545023]}, "CPU_CLK_UNHALTED_REF": {"0": [495840]}, "MEM_LOAD_UOPS_RETIRED_L3_ALL": {"0": [2141]}, "MEM_LOAD_UOPS_RETIRED_L3_MISS": {"0": [729]}, "UOPS_RETIRED_ALL": {"0": [440573]}}}}}}

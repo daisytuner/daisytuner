@@ -1,0 +1,1 @@
+{"DATA": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.709]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [399832]}, "CPU_CLK_UNHALTED_CORE": {"0": [1333878]}, "CPU_CLK_UNHALTED_REF": {"0": [1214560]}, "MEM_UOPS_RETIRED_LOADS_ALL": {"0": [133349]}, "MEM_UOPS_RETIRED_STORES_ALL": {"0": [66645]}}}}}}

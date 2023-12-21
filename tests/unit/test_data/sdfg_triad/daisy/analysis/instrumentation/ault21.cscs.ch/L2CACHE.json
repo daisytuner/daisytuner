@@ -1,0 +1,1 @@
+{"L2CACHE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.186]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [235944]}, "CPU_CLK_UNHALTED_CORE": {"0": [329612]}, "CPU_CLK_UNHALTED_REF": {"0": [300200]}, "L2_TRANS_ALL_REQUESTS": {"0": [55904]}, "L2_RQSTS_MISS": {"0": [18030]}}}}}}

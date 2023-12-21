@@ -1,0 +1,1 @@
+{"TLB_INSTR": {"durations": {"(0, 0, -1)": {"Timer": {"0": [0.186]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [235944]}, "CPU_CLK_UNHALTED_CORE": {"0": [325800]}, "CPU_CLK_UNHALTED_REF": {"0": [296540]}, "ITLB_MISSES_CAUSES_A_WALK": {"0": [24]}, "ITLB_MISSES_WALK_DURATION": {"0": [625]}}}}}}

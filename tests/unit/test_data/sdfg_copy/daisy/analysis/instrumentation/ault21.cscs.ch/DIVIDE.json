@@ -1,0 +1,1 @@
+{"DIVIDE": {"durations": {"(0, 0, -1)": {"Timer": {"0": [4.25]}}}, "counters": {"(0, 0, -1)": {"state_0_0_-1": {"INSTR_RETIRED_ANY": {"0": [5255061]}, "CPU_CLK_UNHALTED_CORE": {"0": [8554141]}, "CPU_CLK_UNHALTED_REF": {"0": [7778600]}, "ARITH_FPU_DIV_ACTIVE": {"0": [4, 50]}}}}}}
