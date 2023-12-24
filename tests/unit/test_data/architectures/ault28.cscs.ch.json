@@ -1,0 +1,14 @@
+{
+    "arch": "arm64fx",
+    "num_sockets": 4,
+    "cores_per_socket": 12,
+    "threads_per_core": 1,
+    "l2_cache": 8096,
+    "l3_cache": 0,
+    "peakflops": 170066.59,
+    "peakflops_avx": 2690901.11,
+    "stream_load": 306417.08,
+    "stream_store": 280133.94,
+    "stream_copy": 518353.59,
+    "stream_triad": 497039.96
+}

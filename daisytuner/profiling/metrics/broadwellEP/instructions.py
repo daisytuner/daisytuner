@@ -45,7 +45,7 @@ class Instructions(Metric):
         volume_branches = []
         for state in self._sdfg.states():
             volume_branches.append(
-                np.ndarray(
+                np.array(
                     [
                         measurements[0]
                         for thread_id, measurements in counters["INSTR_RETIRED_ANY"][

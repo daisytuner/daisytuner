@@ -42,7 +42,7 @@ class Branches(Metric):
         metric = volume_branches
         return metric
 
-    def compute_per_branch(self) -> np.ndarray:
+    def compute_per_thread(self) -> np.ndarray:
         counters = self.values()
 
         volume_branches = []

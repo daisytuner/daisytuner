@@ -1,0 +1,14 @@
+{
+    "arch": "skylakeX",
+    "num_sockets": 1,
+    "cores_per_socket": 18,
+    "threads_per_core": 2,
+    "l2_cache": 1024,
+    "l3_cache": 25344,
+    "peakflops": 107352.24,
+    "peakflops_avx": 742968.44,
+    "stream_load": 104667.67,
+    "stream_store": 46696.38,
+    "stream_copy": 65439.38,
+    "stream_triad": 77679.83
+}

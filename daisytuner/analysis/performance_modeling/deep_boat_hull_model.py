@@ -1,20 +1,9 @@
 # Copyright 2022-2023 ETH Zurich and the Daisytuner authors.
 import dace
 
-from dace.sdfg.work_depth_analysis.work_depth import (
-    tasklet_work,
-    scope_work_depth,
-)
-
 from daisytuner.analysis.similarity.map_nest import MapNest
 from daisytuner.analysis.similarity.map_nest_model import MapNestModel
 from daisytuner.analysis.performance_modeling.boat_hull_model import BoatHullModel
-from daisytuner.analysis.similarity.profiling_features.norm_coeffs import (
-    TARGETS_MEAN_CPU,
-    TARGETS_MEAN_GPU,
-    TARGETS_STD_CPU,
-    TARGETS_STD_GPU,
-)
 
 
 class DeepBoatHullModel(BoatHullModel):

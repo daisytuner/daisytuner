@@ -12,5 +12,4 @@ class LoadRate(CompoundMetric):
         super().__init__(
             metric_a=Loads(sdfg, hostname, cache=cache),
             metric_b=Instructions(sdfg, hostname, cache=cache),
-            cache=cache,
         )

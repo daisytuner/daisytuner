@@ -1,0 +1,24 @@
+{
+    "arch": "haswellEP",
+    "num_sockets": 1,
+    "cores_per_socket": 12,
+    "threads_per_core": 2,
+    "l2_cache": 256,
+    "l3_cache": 30720,
+    "peakflops": 64014.11,
+    "peakflops_avx": 505581.94,
+    "stream_load": 54884.88,
+    "stream_store": 23490.74,
+    "stream_copy": 31800.04,
+    "stream_triad": 35729.02,
+    "gpu": {
+        "devices": 1,
+        "arch": "nvidia_cc_ge_7",
+        "compute_capability": 8.9,
+        "l2_cache": 48,
+        "memory": 11730,
+        "SIMD_width": 32,
+        "clock_rate": 2640,
+        "mem_clock_rate": 10501
+    }
+}

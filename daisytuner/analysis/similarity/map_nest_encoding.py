@@ -9,6 +9,8 @@ import torch_geometric as geo
 
 from torch_geometric.utils.convert import to_networkx
 
+from dace.sdfg.utils import has_dynamic_map_inputs
+
 from collections import Counter
 from typing import Any, Dict, List
 from pyvis.network import Network
@@ -67,7 +69,7 @@ class MapNestEncoding:
 
     """
 
-    MAX_ARRAY_DIMS = 6
+    MAX_ARRAY_DIMS = 8
     MAX_MAP_DIMS = 12
 
     START_ACCESS_NODE = 0
@@ -118,37 +120,33 @@ class MapNestEncoding:
                 self._params.append(node.map.params[0])
 
     @staticmethod
+    def is_data_dependent(sdfg: dace.SDFG) -> bool:
+        for nsdfg in sdfg.all_sdfgs_recursive():
+            for state in nsdfg.states():
+                for node in state.nodes():
+                    if isinstance(node, dace.nodes.MapEntry):
+                        if has_dynamic_map_inputs(state, node):
+                            return True
+
+                for edge in state.edges():
+                    if edge.data is not None:
+                        if edge.data.dynamic:
+                            return True
+
+        return False
+
+    @staticmethod
     def preprocess(sdfg: dace.SDFG):
         results = {}
         pipeline = MapExpandedForm()
         pipeline.apply_pass(sdfg, results)
-
-        for desc in sdfg.arrays.values():
-            desc.storage = dace.StorageType.Default
-
-        for node in sdfg.start_state.nodes():
-            if isinstance(node, dace.nodes.MapEntry):
-                node.map.schedule = dace.ScheduleType.Default
 
     @staticmethod
     def can_be_encoded(sdfg: dace.SDFG, symbol_values: Dict = None) -> bool:
         if not MapExpandedForm.is_expanded_form(sdfg):
             return False
 
-        # 1. All symbols are defined
-        params = set()
-        for node in sdfg.start_state.nodes():
-            if isinstance(node, dace.nodes.MapEntry):
-                params.add(node.map.params[0])
-
-        free_symbols = sdfg.free_symbols.difference(params)
-        free_symbols = free_symbols.difference(sdfg.constants)
-        if symbol_values is not None:
-            free_symbols = free_symbols.difference(symbol_values)
-        if len(free_symbols) > 0:
-            return False
-
-        # 2. SDFG only contains the map nest
+        # 1. SDFG only contains the map nest
         #   - single state
         #   - single connected-component
         #   - single top-level map
@@ -166,18 +164,6 @@ class MapNestEncoding:
         ]
         if len(top_level_maps) != 1:
             return False
-
-        # 3. No scheduling information
-        #   - storage
-        #   - schedules
-        for desc in sdfg.arrays.values():
-            if desc.storage != dace.StorageType.Default:
-                return False
-
-        for node in sdfg.start_state.nodes():
-            if isinstance(node, dace.nodes.MapEntry):
-                if node.map.schedule != dace.ScheduleType.Default:
-                    return False
 
         return True
 
@@ -218,16 +204,19 @@ class MapNestEncoding:
         )
         edge_attr = np.vstack(self._edges_attr)
 
-        # Log2p transformation
-        nodes = np.sign(nodes) * np.log2(np.abs(nodes) + 1.0)
-
         x = torch.tensor(nodes, dtype=torch.float)
         edge_index = torch.tensor(edge_index, dtype=torch.long)
         edge_attr = torch.tensor(edge_attr, dtype=torch.float)
+
+        # Log2p transform
+        x = torch.sign(x) * torch.log2(torch.abs(x) + 1.0)
+        edge_attr = torch.sign(edge_attr) * torch.log2(torch.abs(edge_attr) + 1.0)
+
         self._data = geo.data.Data(
             x=x,
             edge_index=edge_index,
             edge_attr=edge_attr,
+            is_data_dependent=MapNestEncoding.is_data_dependent(self._sdfg),
         )
 
         return self._data
@@ -241,6 +230,7 @@ class MapNestEncoding:
         arr = node.data
         buffer_id = self._buffers.index(arr) + 1
         desc = self._sdfg.arrays[arr]
+        assert len(desc.shape) < MapNestEncoding.MAX_ARRAY_DIMS
 
         # Array features:
         # 0: buffer_id - assign IDs to arrays

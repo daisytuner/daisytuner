@@ -25,7 +25,7 @@ class CompoundMetric(Metric):
         return self._metric_a.compute() / self._metric_b.compute()
 
     def compute_per_thread(self) -> np.array:
-        return self._metric_a.compute() / self._metric_b.compute()
+        return self._metric_a.compute_per_thread() / self._metric_b.compute_per_thread()
 
     def has_values(self) -> bool:
         return self._metric_a.has_values() and self._metric_b.has_values()

@@ -1,0 +1,14 @@
+{
+    "arch": "haswellEP",
+    "num_sockets": 1,
+    "cores_per_socket": 12,
+    "threads_per_core": 2,
+    "l2_cache": 256,
+    "l3_cache": 30720,
+    "peakflops": 69245.94,
+    "peakflops_avx": 534402.90,
+    "stream_load": 61818.41,
+    "stream_store": 25350.73,
+    "stream_copy": 37245.97,
+    "stream_triad": 46814.58
+}

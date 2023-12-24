@@ -104,5 +104,5 @@ class L2Volume(Metric):
                 * 256
             )
 
-        metric = 1e-6 * np.vtsack(volume).sum(axis=0, keepdims=False)
+        metric = 1e-6 * np.vstack(volume).sum(axis=0, keepdims=False)
         return metric

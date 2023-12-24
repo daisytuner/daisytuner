@@ -1,0 +1,24 @@
+{
+    "arch": "zen",
+    "num_sockets": 1,
+    "cores_per_socket": 4,
+    "threads_per_core": 2,
+    "l2_cache": 512,
+    "l3_cache": 4096,
+    "peakflops": 36580.18,
+    "peakflops_avx": 102118.46,
+    "stream_load": 30743.23,
+    "stream_store": 11785.54,
+    "stream_copy": 15558.26,
+    "stream_triad": 19226.91,
+    "gpu": {
+        "devices": 1,
+        "arch": "nvidia_cc_ge_7",
+        "compute_capability": 7.5,
+        "l2_cache": 3,
+        "memory": 5790,
+        "SIMD_width": 32,
+        "clock_rate": 1335,
+        "mem_clock_rate": 7001
+    }
+}

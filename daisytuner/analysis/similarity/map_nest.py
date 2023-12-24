@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import dace
 
-from typing import List, Generator
+from typing import Generator
 
 from dace.sdfg.state import StateSubgraphView
 from dace.sdfg.analysis.cutout import SDFGCutout
@@ -61,9 +61,6 @@ class MapNest(StateSubgraphView):
         for dnode in self.data_nodes():
             if self.out_degree(dnode) == 0:
                 yield dnode
-
-    def is_data_dependent(self) -> bool:
-        raise NotImplementedError
 
     def as_cutout(self) -> dace.SDFG:
         cutout = SDFGCutout.singlestate_cutout(

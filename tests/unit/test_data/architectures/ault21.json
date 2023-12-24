@@ -1,0 +1,14 @@
+{
+    "arch": "broadwellEP",
+    "num_sockets": 4,
+    "cores_per_socket": 14,
+    "threads_per_core": 2,
+    "l2_cache": 256,
+    "l3_cache": 35840,
+    "peakflops": 244099.48,
+    "peakflops_avx": 1916221.41,
+    "stream_load": 249830.09,
+    "stream_store": 117346.63,
+    "stream_copy": 160506.98,
+    "stream_triad": 191861.01
+}
