@@ -142,19 +142,19 @@ class MapNestModel(pl.LightningModule):
             self.register_buffer(
                 "TARGETS_STD", torch.tensor(TARGETS_CPU_MEAN, dtype=torch.float32)
             )
-        # else:
-        #     self.register_buffer(
-        #         "BENCHMARK_MEAN", torch.tensor(BENCHMARK_GPU_MEAN, dtype=torch.float32)
-        #     )
-        #     self.register_buffer(
-        #         "BENCHMARK_STD", torch.tensor(BENCHMARK_GPU_STD, dtype=torch.float32)
-        #     )
-        #     self.register_buffer(
-        #         "TARGETS_MEAN", torch.tensor(TARGETS_GPU_MEAN, dtype=torch.float32)
-        #     )
-        #     self.register_buffer(
-        #         "TARGETS_STD", torch.tensor(TARGETS_GPU_MEAN, dtype=torch.float32)
-        #     )
+        else:
+            self.register_buffer(
+                "BENCHMARK_MEAN", torch.tensor(BENCHMARK_GPU_MEAN, dtype=torch.float32)
+            )
+            self.register_buffer(
+                "BENCHMARK_STD", torch.tensor(BENCHMARK_GPU_STD, dtype=torch.float32)
+            )
+            self.register_buffer(
+                "TARGETS_MEAN", torch.tensor(TARGETS_GPU_MEAN, dtype=torch.float32)
+            )
+            self.register_buffer(
+                "TARGETS_STD", torch.tensor(TARGETS_GPU_MEAN, dtype=torch.float32)
+            )
 
     @staticmethod
     def create(
@@ -257,18 +257,18 @@ class MapNestModel(pl.LightningModule):
         )
 
         # 2. Compute device embedding from device features
-        device_featues = (
+        device_features = (
             data.device_features - self.BENCHMARK_MEAN
         ) / self.BENCHMARK_STD
-        device_embedding = self.device_encoder(device_featues)
+        device_embedding = self.device_encoder(device_features)
 
         # 3. Lower neck: Static + device
         lower_embedding = torch.hstack([static_embedding, device_embedding])
         lower_embedding = self.neck_lower(lower_embedding)
 
         # 4. Compute optional profiling embeddings from profiling features
-        profiling_featues = data.profiling_features
-        profiling_embedding = self.profiling_encoder(profiling_featues)
+        profiling_features = data.profiling_features
+        profiling_embedding = self.profiling_encoder(profiling_features)
 
         mask = data.is_data_dependent
         if not isinstance(mask, torch.Tensor):
@@ -550,3 +550,8 @@ BENCHMARK_CPU_STD = [
 ]
 TARGETS_CPU_MEAN = [-4.5443]
 TARGETS_CPU_STD = [2.1218]
+
+BENCHMARK_GPU_MEAN = [3.1872, 3.8135, 13.4560, 10.7533, 12.1430]
+BENCHMARK_GPU_STD = [0.1171, 1.6672, 0.9013, 0.4436, 1.4328]
+TARGETS_GPU_MEAN = [-7.4915]
+TARGETS_GPU_STD = [3.3240]

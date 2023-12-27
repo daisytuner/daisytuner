@@ -74,62 +74,30 @@ class PerformanceCounters(ABC):
                 counter_values = group_values["counters"]
                 for node_uuid in counter_values:
                     sdfg_id, state_id, node_id = ast.literal_eval(node_uuid)
+                    if sdfg_id != self._sdfg.sdfg_id or state_id == -1 or node_id != -1:
+                        continue
 
-                    nsdfg, state, node = (None, None, None)
-                    for sd in self._sdfg.all_sdfgs_recursive():
-                        if sd.sdfg_id == sdfg_id:
-                            nsdfg = sd
-                            if state_id == -1:
-                                break
-
-                            state = sd.node(state_id)
-                            if node_id == -1:
-                                break
-
-                            node = state.node(node_id)
-
+                    state = self._sdfg.node(state_id)
                     node_name = next(counter_values[node_uuid].__iter__())
                     values = counter_values[node_uuid][node_name]
                     for counter in values:
                         if counter not in self._counters:
                             continue
-
-                        if node is not None:
-                            self._values[counter] = {node: values[counter]}
-                        elif state is not None:
-                            self._values[counter] = {state: values[counter]}
-                        else:
-                            self._values[counter] = {nsdfg: values[counter]}
+                        self._values[counter] = {state: values[counter]}
 
                 # Durations
                 duration_values = group_values["durations"]
                 for node_uuid in duration_values:
                     sdfg_id, state_id, node_id = ast.literal_eval(node_uuid)
+                    if sdfg_id != self._sdfg.sdfg_id or state_id == -1 or node_id != -1:
+                        continue
 
-                    nsdfg, state, node = (None, None, None)
-                    for sd in self._sdfg.all_sdfgs_recursive():
-                        if sd.sdfg_id == sdfg_id:
-                            nsdfg = sd
-                            if state_id == -1:
-                                break
-
-                            state = sd.node(state_id)
-                            if node_id == -1:
-                                break
-
-                            node = state.node(node_id)
-
+                    state = self._sdfg.node(state_id)
                     values = duration_values[node_uuid]
                     for counter in values:
                         if counter not in self._counters:
                             continue
-
-                        if node is not None:
-                            self._values[counter] = {node: values[counter]}
-                        elif state is not None:
-                            self._values[counter] = {state: values[counter]}
-                        else:
-                            self._values[counter] = {nsdfg: values[counter]}
+                        self._values[counter] = {state: values[counter]}
 
     def has_values(self) -> bool:
         for c in self._counters:
@@ -216,55 +184,25 @@ class PerformanceCounters(ABC):
                 counter_values = group_values["counters"]
                 for node_uuid in counter_values:
                     sdfg_id, state_id, node_id = ast.literal_eval(node_uuid)
+                    if sdfg_id != sdfg.sdfg_id or state_id == -1 or node_id != -1:
+                        continue
 
-                    nsdfg, state, node = (None, None, None)
-                    for sd in sdfg.all_sdfgs_recursive():
-                        if sd.sdfg_id == sdfg_id:
-                            nsdfg = sd
-                            if state_id == -1:
-                                break
-
-                            state = sd.node(state_id)
-                            if node_id == -1:
-                                break
-
-                            node = state.node(node_id)
-
+                    state = sdfg.node(state_id)
                     node_name = next(counter_values[node_uuid].__iter__())
                     values = counter_values[node_uuid][node_name]
                     for counter in values:
-                        if node is not None:
-                            all_values[counter] = {node: values[counter]}
-                        elif state is not None:
-                            all_values[counter] = {state: values[counter]}
-                        else:
-                            all_values[counter] = {nsdfg: values[counter]}
+                        all_values[counter] = {state: values[counter]}
 
                 # Durations
                 duration_values = group_values["durations"]
                 for node_uuid in duration_values:
                     sdfg_id, state_id, node_id = ast.literal_eval(node_uuid)
+                    if sdfg_id != sdfg.sdfg_id or state_id == -1 or node_id != -1:
+                        continue
 
-                    nsdfg, state, node = (None, None, None)
-                    for sd in sdfg.all_sdfgs_recursive():
-                        if sd.sdfg_id == sdfg_id:
-                            nsdfg = sd
-                            if state_id == -1:
-                                break
-
-                            state = sd.node(state_id)
-                            if node_id == -1:
-                                break
-
-                            node = state.node(node_id)
-
+                    state = sdfg.node(state_id)
                     values = duration_values[node_uuid]
                     for counter in values:
-                        if node is not None:
-                            all_values[counter] = {node: values[counter]}
-                        elif state is not None:
-                            all_values[counter] = {state: values[counter]}
-                        else:
-                            all_values[counter] = {nsdfg: values[counter]}
+                        all_values[counter] = {state: values[counter]}
 
         return all_values

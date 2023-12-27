@@ -9,7 +9,7 @@ from daisytuner.profiling import Benchmarking
 
 class GPUBenchmark:
 
-    NUM_FEATURES = 7
+    NUM_FEATURES = 5
 
     def __init__(self, gpu_info: Dict = None) -> None:
         self._data = None
@@ -25,14 +25,15 @@ class GPUBenchmark:
             self._gpu_info = bench.analyze()["gpu"]
 
         vec = np.zeros((GPUBenchmark.NUM_FEATURES,), dtype=np.float32)
-        vec[0] = self._gpu_info["devices"]
-        vec[1] = self._gpu_info["compute_capability"]
-        vec[2] = self._gpu_info["l2_cache"]
-        vec[3] = self._gpu_info["memory"]
-        vec[4] = self._gpu_info["SIMD_width"]
-        vec[5] = self._gpu_info["clock_rate"]
-        vec[6] = self._gpu_info["mem_clock_rate"]
+        vec[0] = self._gpu_info["compute_capability"]
+        vec[1] = self._gpu_info["l2_cache"]
+        vec[2] = self._gpu_info["memory"]
+        vec[3] = self._gpu_info["clock_rate"]
+        vec[4] = self._gpu_info["mem_clock_rate"]
+
         self._data = torch.tensor(vec, dtype=torch.float)[None, :]
+        self._data = torch.log2(self._data + 1.0)
+
         return self._data
 
     @staticmethod
