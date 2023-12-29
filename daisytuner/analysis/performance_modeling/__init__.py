@@ -3,3 +3,4 @@ from daisytuner.analysis.performance_modeling.boat_hull_model import BoatHullMod
 from daisytuner.analysis.performance_modeling.deep_boat_hull_model import (
     DeepBoatHullModel,
 )
+from daisytuner.analysis.performance_modeling.performance_model import PerformanceModel

@@ -6,11 +6,12 @@ import numpy as np
 
 from collections import Counter
 
-from daisytuner.copilot import Environment
-from daisytuner.copilot.agents import DeviceAgent
+from daisytuner.device_mapping import Environment
+from daisytuner.device_mapping.agents import DeviceAgent
+
 from daisytuner.normalization import APrioriMapNestNormalization
-from daisytuner.profiling.helpers import random_arguments
 from daisytuner.transformations import MapWrapping
+from daisytuner.profiling.helpers import random_arguments
 
 from pathlib import Path
 
@@ -119,22 +120,22 @@ def test_polybench(benchmark):
     for array, values in args_original.items():
         assert np.allclose(values, args_normalized[array], equal_nan=True)
 
-    # # 2. Tuning for CPU-GPU
-    # sdfg.apply_transformations_repeated(MapWrapping)
+    # 2. Device Mapping
+    sdfg.apply_transformations_repeated(MapWrapping)
 
-    # env = Environment(sdfg=sdfg)
-    # agent = DeviceAgent()
+    env = Environment(sdfg=sdfg)
+    agent = DeviceAgent()
+    current_state = env.state
+    terminated = current_state.terminated
+    while not terminated:
+        action = agent.action(current_state)
+        current_state, reward, terminated, truncated, info = env.step(action=action)
+        if terminated:
+            assert reward == 1.0
+        else:
+            assert reward == 0.0
 
-    # # 2.a Run optimization
-    # terminated = False
-    # current_state = env._current_state
-    # while not terminated:
-    #     action = agent.action(current_state)
-    #     current_state, reward, terminated, truncated, info = env.step(action=action)
-
-    # # 2.b Numerical evaluation
-    # sdfg_tuned = info["scheduled_sdfg"]
-    # sdfg_tuned(**args_tuned)
-
-    # for array, values in args_original.items():
-    #     assert np.allclose(values, args_normalized[array], equal_nan=True)
+    sdfg_opt = info["schedule"]
+    sdfg_opt(**args_tuned)
+    for array, values in args_original.items():
+        assert np.allclose(values, args_tuned[array], equal_nan=True)

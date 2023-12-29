@@ -6,8 +6,6 @@ import numpy as np
 
 from collections import Counter
 
-from daisytuner.copilot import Environment
-from daisytuner.copilot.agents import DeviceAgent
 from daisytuner.normalization import APrioriMapNestNormalization
 from daisytuner.profiling.helpers import random_arguments
 
@@ -91,21 +89,3 @@ def test_cloudsc(benchmark):
 
     for array, values in args_original.items():
         assert np.allclose(values, args_normalized[array], equal_nan=True)
-
-    # # 2. Tuning for CPU-GPU
-    # env = Environment(sdfg=sdfg)
-    # agent = DeviceAgent()
-
-    # # 2.a Run optimization
-    # terminated = False
-    # current_state = env._current_state
-    # while not terminated:
-    #     action = agent.action(current_state)
-    #     current_state, reward, terminated, truncated, info = env.step(action=action)
-
-    # # 2.b Numerical evaluation
-    # sdfg_tuned = info["scheduled_sdfg"]
-    # sdfg_tuned(**args_tuned)
-
-    # for array, values in args_original.items():
-    #     assert np.allclose(values, args_normalized[array], equal_nan=True)
