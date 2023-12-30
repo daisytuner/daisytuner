@@ -26,7 +26,7 @@ class DeviceAgent:
             return Action.SCHEDULE_MAP_NEST_DEVICE, active_maps[0]
 
         # Terminal states: Copy-back
-        if state.is_terminal_state():
+        if state.is_terminal():
             for array in active_gom.array_table:
                 if state.sdfg.arrays[array].transient:
                     continue

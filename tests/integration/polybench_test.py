@@ -6,8 +6,10 @@ import numpy as np
 
 from collections import Counter
 
+from daisytuner.analysis.similarity.benchmarking import CPUBenchmark, GPUBenchmark
+
 from daisytuner.device_mapping import Environment
-from daisytuner.device_mapping.agents import DeviceAgent
+from daisytuner.device_mapping.agents import GreedyAgent
 
 from daisytuner.normalization import APrioriMapNestNormalization
 from daisytuner.transformations import MapWrapping
@@ -123,8 +125,12 @@ def test_polybench(benchmark):
     # 2. Device Mapping
     sdfg.apply_transformations_repeated(MapWrapping)
 
-    env = Environment(sdfg=sdfg)
-    agent = DeviceAgent()
+    host_benchmark = CPUBenchmark.from_cache("garbenheim")
+    device_benchmark = GPUBenchmark.from_cache("garbenheim")
+    env = Environment(
+        sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
+    )
+    agent = GreedyAgent()
     current_state = env.state
     terminated = current_state.terminated
     while not terminated:

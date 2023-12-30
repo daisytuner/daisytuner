@@ -2,6 +2,8 @@
 import dace
 import numpy as np
 
+from daisytuner.analysis.similarity.benchmarking import CPUBenchmark, GPUBenchmark
+
 from daisytuner.device_mapping import Environment
 from daisytuner.device_mapping.agents import HostAgent
 
@@ -22,7 +24,11 @@ def test_single_state():
     sdfg = sdfg_single_state.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    host_benchmark = CPUBenchmark.from_cache("garbenheim")
+    device_benchmark = GPUBenchmark.from_cache("garbenheim")
+    env = Environment(
+        sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
+    )
     current_state = env.state
 
     # Graph of states
@@ -82,7 +88,11 @@ def test_multiple_map_nests():
     sdfg = sdfg_multiple_map_nests.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    host_benchmark = CPUBenchmark.from_cache("garbenheim")
+    device_benchmark = GPUBenchmark.from_cache("garbenheim")
+    env = Environment(
+        sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
+    )
     current_state = env.state
 
     # Graph of states
@@ -140,7 +150,11 @@ def test_two_states():
     sdfg = sdfg_two_states.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    host_benchmark = CPUBenchmark.from_cache("garbenheim")
+    device_benchmark = GPUBenchmark.from_cache("garbenheim")
+    env = Environment(
+        sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
+    )
     current_state = env.state
 
     # Graph of states
@@ -199,7 +213,11 @@ def test_loop():
     sdfg = sdfg_loop.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    host_benchmark = CPUBenchmark.from_cache("garbenheim")
+    device_benchmark = GPUBenchmark.from_cache("garbenheim")
+    env = Environment(
+        sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
+    )
     current_state = env.state
 
     # Graph of states
@@ -266,7 +284,11 @@ def test_loop_with_branches():
     sdfg = sdfg_loop_with_branches.to_sdfg()
     sdfg.simplify()
 
-    env = Environment(sdfg=sdfg)
+    host_benchmark = CPUBenchmark.from_cache("garbenheim")
+    device_benchmark = GPUBenchmark.from_cache("garbenheim")
+    env = Environment(
+        sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
+    )
     current_state = env.state
 
     # Graph of states

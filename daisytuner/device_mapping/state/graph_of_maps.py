@@ -49,6 +49,10 @@ class GraphOfMaps(OrderedMultiDiGraph):
         return self._state
 
     @property
+    def map_nests(self) -> Dict[dace.nodes.MapEntry, MapNest]:
+        return self._map_nests
+
+    @property
     def array_table(self) -> Dict[str, dace.DeviceType]:
         return self._array_table
 

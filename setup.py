@@ -112,6 +112,7 @@ setup(
         "pyvis>=0.3.2",
         "networkx>=3.1.0",
         "gymnasium>=0.29.1",
+        "p-tqdm>=1.4.0",
     ],
     extras_require={
         "dev": ["black==22.10.0", "pytest>=7.2.0", "pytest-cov>=4.1.0"],

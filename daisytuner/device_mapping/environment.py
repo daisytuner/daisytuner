@@ -4,9 +4,17 @@ import gymnasium as gym
 
 from typing import Tuple, Any
 
+from daisytuner.analysis.similarity import MapNestModel
+from daisytuner.analysis.similarity.benchmarking import CPUBenchmark, GPUBenchmark
+from daisytuner.analysis.performance_modeling import PerformanceModel
+
+from daisytuner.transfer_tuning.transfer_tuner import TransferTuner
+
 from daisytuner.device_mapping.action import Action
 from daisytuner.device_mapping.state import GraphOfStates, InvalidScheduleException
-from daisytuner.analysis.performance_modeling import PerformanceModel
+from daisytuner.device_mapping.state.identity_transfer_tuner import (
+    IdentityTransferTuner,
+)
 
 
 class Environment(gym.Env):
@@ -15,6 +23,9 @@ class Environment(gym.Env):
     def __init__(
         self,
         sdfg: dace.SDFG,
+        cpu_benchmark: CPUBenchmark,
+        gpu_benchmark: GPUBenchmark,
+        transfer_tuner: TransferTuner = None,
         reward_function: PerformanceModel = None,
         render_mode: str = None,
     ) -> None:
@@ -22,8 +33,24 @@ class Environment(gym.Env):
         self.render_mode = render_mode
 
         self._sdfg = sdfg
+        self._cpu_benchmark = cpu_benchmark
+        self._gpu_benchmark = gpu_benchmark
+        self._transfer_tuner = transfer_tuner
         self._reward_function = reward_function
-        self._state = GraphOfStates(sdfg)
+
+        print("Initializing game...")
+        self._state = GraphOfStates(
+            self._sdfg,
+            cpu_benchmark=self._cpu_benchmark,
+            gpu_benchmark=self._gpu_benchmark,
+        )
+        self._state.init(
+            host_model=MapNestModel.create(dace.DeviceType.CPU),
+            device_model=MapNestModel.create(dace.DeviceType.GPU),
+            transfer_tuner=self._transfer_tuner
+            if self._transfer_tuner is not None
+            else IdentityTransferTuner(),
+        )
 
     @property
     def state(self) -> GraphOfStates:
@@ -81,7 +108,19 @@ class Environment(gym.Env):
     def reset(
         self, seed: int = None, options: dict[str, Any] = None
     ) -> Tuple[GraphOfStates, dict[str, Any]]:
-        self._state = GraphOfStates(self._sdfg)
+        print("Initializing game...")
+        self._state = GraphOfStates(
+            self._sdfg,
+            cpu_benchmark=self._cpu_benchmark,
+            gpu_benchmark=self._gpu_benchmark,
+        )
+        self._state.init(
+            host_model=MapNestModel.create(dace.DeviceType.CPU),
+            device_model=MapNestModel.create(dace.DeviceType.CPU),
+            transfer_tuner=self._transfer_tuner
+            if self._transfer_tuner is not None
+            else IdentityTransferTuner(),
+        )
         return self._state, {}
 
     def render(self) -> None:

@@ -1,8 +1,12 @@
 # Copyright 2022-2023 ETH Zurich and the Daisytuner authors.
+from __future__ import annotations
+
 import torch
+import json
 import numpy as np
 
 from typing import Dict
+from pathlib import Path
 
 from daisytuner.profiling import Benchmarking
 
@@ -42,3 +46,9 @@ class CPUBenchmark:
     @staticmethod
     def dimensions():
         return CPUBenchmark.NUM_FEATURES
+
+    @staticmethod
+    def from_cache(hostname: str) -> CPUBenchmark:
+        with open(Path.home() / ".daisy" / f"{hostname}.json", "r") as handle:
+            data = json.load(handle)
+            return CPUBenchmark(cpu_info=data)

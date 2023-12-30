@@ -211,7 +211,7 @@ class MapNestModel(pl.LightningModule):
 
         return model
 
-    def predict(
+    def preprocess(
         self,
         map_nest: MapNest,
         benchmark: Union[CPUBenchmark, GPUBenchmark],
@@ -243,12 +243,38 @@ class MapNestModel(pl.LightningModule):
             else:
                 data.profiling_features = torch.zeros((1, GPUProfiling.dimensions()))
 
+        return data
+
+    def predict(
+        self,
+        map_nest: MapNest,
+        benchmark: Union[CPUBenchmark, GPUBenchmark],
+    ):
+        data = self.preprocess(map_nest, benchmark)
+
         data = data.to(self.device)
         preds, *rem = self.forward(data)
         preds = torch.exp2((preds * self.TARGETS_STD) + self.TARGETS_MEAN)
 
         preds = preds.cpu().detach().numpy()[0]
         return (preds, *rem)
+
+    def predict_batch(self, batch):
+        batch = batch.to(self.device)
+        preds, embs, node_embs = self.forward(batch)
+        preds = torch.exp2((preds * self.TARGETS_STD) + self.TARGETS_MEAN)
+
+        preds = preds.cpu().detach().numpy()
+        embs = embs.cpu().detach().numpy()
+        node_embs = node_embs.cpu().detach().numpy().squeeze()
+
+        batch_size = batch.ptr.size(0) - 1
+        preds = [pred for pred in preds]
+        embs = [emb for emb in embs]
+        node_embs = [
+            node_embs[batch.ptr[i] : batch.ptr[i + 1]] for i in range(batch_size)
+        ]
+        return list(zip(preds, embs, node_embs))
 
     def forward(self, data):
         # 1. Compute static embedding from static features
