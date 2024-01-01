@@ -121,16 +121,15 @@ class MapNestEncoding:
 
     @staticmethod
     def is_data_dependent(sdfg: dace.SDFG) -> bool:
+        # TODO: Improve
         for nsdfg in sdfg.all_sdfgs_recursive():
             for state in nsdfg.states():
                 for node in state.nodes():
                     if isinstance(node, dace.nodes.MapEntry):
                         if has_dynamic_map_inputs(state, node):
                             return True
-
-                for edge in state.edges():
-                    if edge.data is not None:
-                        if edge.data.dynamic:
+                    elif isinstance(node, dace.nodes.AccessNode):
+                        if node.label == "Indirection":
                             return True
 
         return False
