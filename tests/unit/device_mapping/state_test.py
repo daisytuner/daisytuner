@@ -4,8 +4,8 @@ import numpy as np
 
 from daisytuner.analysis.similarity.benchmarking import CPUBenchmark, GPUBenchmark
 
+from daisytuner.device_mapping.state.storage_location import StorageLocation
 from daisytuner.device_mapping import Environment
-from daisytuner.device_mapping.agents import HostAgent
 
 
 def test_single_state():
@@ -29,28 +29,19 @@ def test_single_state():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
-
     current_state = env.state
-    agent = HostAgent()
-    terminated = current_state.terminated
-    while not terminated:
-        action = agent.action(current_state)
-        current_state, reward, terminated, truncated, info = env.step(action=action)
-        if terminated:
-            assert reward == 1.0
-        else:
-            assert reward == 0.0
 
-    sdfg_opt = info["schedule"]
+    # Graph of states
+    assert len(current_state.nodes()) == 2
+    assert len(current_state.edges()) == 1
+    assert current_state.active()[0] == sdfg.start_state
 
-    A = np.random.random((512, 256)).astype(np.float64)
-    B = np.random.random((256,)).astype(np.float64)
-    C = np.zeros((512,), dtype=np.float64)
-    C_opt = np.zeros((512,), dtype=np.float64)
-
-    sdfg(A=A, B=B, C=C)
-    sdfg_opt(A=A, B=B, C=C_opt)
-    assert np.allclose(C, C_opt)
+    # Graph of maps
+    gom = current_state.active()[1]
+    assert len(gom.nodes()) == 1
+    assert len(gom.edges()) == 0
+    assert gom.array_table is not None
+    assert all([dest == StorageLocation.HOST for dest in gom.array_table.values()])
 
 
 def test_multiple_map_nests():
@@ -81,28 +72,19 @@ def test_multiple_map_nests():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
-
     current_state = env.state
-    agent = HostAgent()
-    terminated = current_state.terminated
-    while not terminated:
-        action = agent.action(current_state)
-        current_state, reward, terminated, truncated, info = env.step(action=action)
-        if terminated:
-            assert reward == 1.0
-        else:
-            assert reward == 0.0
 
-    sdfg_opt = info["schedule"]
+    # Graph of states
+    assert len(current_state.nodes()) == 2
+    assert len(current_state.edges()) == 1
+    assert current_state.active()[0] == sdfg.start_state
 
-    A = np.random.random((512, 256)).astype(np.float64)
-    B = np.random.random((256,)).astype(np.float64)
-    C = np.zeros((512,), dtype=np.float64)
-    C_opt = np.zeros((512,), dtype=np.float64)
-
-    sdfg(A=A, B=B, C=C)
-    sdfg_opt(A=A, B=B, C=C_opt)
-    assert np.allclose(C, C_opt)
+    # Graph of maps
+    gom = current_state.active()[1]
+    assert len(gom.nodes()) == 2
+    assert len(gom.edges()) == 1
+    assert gom.array_table is not None
+    assert all([dest == StorageLocation.HOST for dest in gom.array_table.values()])
 
 
 def test_two_states():
@@ -131,28 +113,19 @@ def test_two_states():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
-
     current_state = env.state
-    agent = HostAgent()
-    terminated = current_state.terminated
-    while not terminated:
-        action = agent.action(current_state)
-        current_state, reward, terminated, truncated, info = env.step(action=action)
-        if terminated:
-            assert reward == 1.0
-        else:
-            assert reward == 0.0
 
-    sdfg_opt = info["schedule"]
+    # Graph of states
+    assert len(current_state.nodes()) == 3
+    assert len(current_state.edges()) == 2
+    assert current_state.active()[0] == sdfg.start_state
 
-    A = np.random.random((512, 256)).astype(np.float64)
-    B = np.random.random((256,)).astype(np.float64)
-    C = np.zeros((512,), dtype=np.float64)
-    C_opt = np.zeros((512,), dtype=np.float64)
-
-    sdfg(A=A, B=B, C=C)
-    sdfg_opt(A=A, B=B, C=C_opt)
-    assert np.allclose(C, C_opt)
+    # Graph of maps
+    gom = current_state.active()[1]
+    assert len(gom.nodes()) == 1
+    assert len(gom.edges()) == 0
+    assert gom.array_table is not None
+    assert all([dest == StorageLocation.HOST for dest in gom.array_table.values()])
 
 
 def test_loop():
@@ -182,28 +155,20 @@ def test_loop():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
-
     current_state = env.state
-    agent = HostAgent()
-    terminated = current_state.terminated
-    while not terminated:
-        action = agent.action(current_state)
-        current_state, reward, terminated, truncated, info = env.step(action=action)
-        if terminated:
-            assert reward == 1.0
-        else:
-            assert reward == 0.0
 
-    sdfg_opt = info["schedule"]
+    # Graph of states
+    assert len(current_state.nodes()) == 5
+    assert len(current_state.edges()) == 4
+    assert not current_state.has_cycles()
+    assert current_state.active()[0] == sdfg.start_state
 
-    A = np.random.random((512, 256)).astype(np.float64)
-    B = np.random.random((256,)).astype(np.float64)
-    C = np.zeros((512,), dtype=np.float64)
-    C_opt = np.zeros((512,), dtype=np.float64)
-
-    sdfg(A=A, B=B, C=C)
-    sdfg_opt(A=A, B=B, C=C_opt)
-    assert np.allclose(C, C_opt)
+    # Graph of maps
+    gom = current_state.active()[1]
+    assert len(gom.nodes()) == 1
+    assert len(gom.edges()) == 0
+    assert gom.array_table is not None
+    assert all([dest == StorageLocation.HOST for dest in gom.array_table.values()])
 
 
 def test_loop_with_branches():
@@ -240,25 +205,17 @@ def test_loop_with_branches():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
-
     current_state = env.state
-    agent = HostAgent()
-    terminated = current_state.terminated
-    while not terminated:
-        action = agent.action(current_state)
-        current_state, reward, terminated, truncated, info = env.step(action=action)
-        if terminated:
-            assert reward == 1.0
-        else:
-            assert reward == 0.0
 
-    sdfg_opt = info["schedule"]
+    # Graph of states
+    assert len(current_state.nodes()) == 8
+    assert len(current_state.edges()) == 8
+    assert not current_state.has_cycles()
+    assert current_state.active()[0] == sdfg.start_state
 
-    A = np.random.random((512, 256)).astype(np.float64)
-    B = np.random.random((256,)).astype(np.float64)
-    C = np.zeros((512,), dtype=np.float64)
-    C_opt = np.zeros((512,), dtype=np.float64)
-
-    sdfg(A=A, B=B, C=C)
-    sdfg_opt(A=A, B=B, C=C_opt)
-    assert np.allclose(C, C_opt)
+    # Graph of maps
+    gom = current_state.active()[1]
+    assert len(gom.nodes()) == 1
+    assert len(gom.edges()) == 0
+    assert gom.array_table is not None
+    assert all([dest == StorageLocation.HOST for dest in gom.array_table.values()])

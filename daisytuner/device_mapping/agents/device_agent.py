@@ -16,7 +16,7 @@ class DeviceAgent:
         # Copy-in
         if active_state == state._start_state and not self._copied:
             for array in active_gom.array_table:
-                if active_gom.array_table[array] != dace.DeviceType.GPU:
+                if not active_gom.array_table[array].is_device():
                     return Action.COPY_HOST_TO_DEVICE, array
 
             self._copied = True
@@ -31,7 +31,7 @@ class DeviceAgent:
                 if state.sdfg.arrays[array].transient:
                     continue
 
-                if active_gom.array_table[array] != dace.DeviceType.CPU:
+                if not active_gom.array_table[array].is_host():
                     return Action.COPY_DEVICE_TO_HOST, array
 
         # Next state

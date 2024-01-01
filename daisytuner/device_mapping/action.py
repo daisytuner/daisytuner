@@ -8,3 +8,4 @@ class Action(Enum):
     SCHEDULE_MAP_NEST_DEVICE = 2
     COPY_HOST_TO_DEVICE = 3
     COPY_DEVICE_TO_HOST = 4
+    FREE_DEVICE = 5

@@ -75,16 +75,19 @@ class Environment(gym.Env):
             self._state.next_state()
         elif action_type == Action.SCHEDULE_MAP_NEST_HOST:
             _, active_gom = self._state.active()
-            active_gom.schedule_map_nest(item, dace.DeviceType.CPU)
+            active_gom.schedule_map_nest_host(item)
         elif action_type == Action.SCHEDULE_MAP_NEST_DEVICE:
             _, active_gom = self._state.active()
-            active_gom.schedule_map_nest(item, dace.DeviceType.GPU)
+            active_gom.schedule_map_nest_device(item)
         elif action_type == Action.COPY_HOST_TO_DEVICE:
             _, active_gom = self._state.active()
-            active_gom.schedule_array(item, dace.DeviceType.GPU)
+            active_gom.copy_host_to_device(item)
         elif action_type == Action.COPY_DEVICE_TO_HOST:
             _, active_gom = self._state.active()
-            active_gom.schedule_array(item, dace.DeviceType.CPU)
+            active_gom.copy_device_to_host(item)
+        elif action_type == Action.FREE_DEVICE:
+            _, active_gom = self._state.active()
+            active_gom.free_device(item)
         else:
             raise ValueError(f"Invalid action type {action_type}")
 

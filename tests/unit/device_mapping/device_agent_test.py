@@ -29,20 +29,8 @@ def test_single_state():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
+
     current_state = env.state
-
-    # Graph of states
-    assert len(current_state.nodes()) == 2
-    assert len(current_state.edges()) == 1
-    assert current_state.active()[0] == sdfg.start_state
-
-    # Graph of maps
-    gom = current_state.active()[1]
-    assert len(gom.nodes()) == 1
-    assert len(gom.edges()) == 0
-    assert gom.array_table is not None
-    assert all([dest == dace.DeviceType.CPU for dest in gom.array_table.values()])
-
     agent = DeviceAgent()
     terminated = current_state.terminated
     while not terminated:
@@ -93,20 +81,8 @@ def test_multiple_map_nests():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
+
     current_state = env.state
-
-    # Graph of states
-    assert len(current_state.nodes()) == 2
-    assert len(current_state.edges()) == 1
-    assert current_state.active()[0] == sdfg.start_state
-
-    # Graph of maps
-    gom = current_state.active()[1]
-    assert len(gom.nodes()) == 2
-    assert len(gom.edges()) == 1
-    assert gom.array_table is not None
-    assert all([dest == dace.DeviceType.CPU for dest in gom.array_table.values()])
-
     agent = DeviceAgent()
     terminated = current_state.terminated
     while not terminated:
@@ -155,20 +131,8 @@ def test_two_states():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
+
     current_state = env.state
-
-    # Graph of states
-    assert len(current_state.nodes()) == 3
-    assert len(current_state.edges()) == 2
-    assert current_state.active()[0] == sdfg.start_state
-
-    # Graph of maps
-    gom = current_state.active()[1]
-    assert len(gom.nodes()) == 1
-    assert len(gom.edges()) == 0
-    assert gom.array_table is not None
-    assert all([dest == dace.DeviceType.CPU for dest in gom.array_table.values()])
-
     agent = DeviceAgent()
     terminated = current_state.terminated
     while not terminated:
@@ -218,21 +182,8 @@ def test_loop():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
+
     current_state = env.state
-
-    # Graph of states
-    assert len(current_state.nodes()) == 5
-    assert len(current_state.edges()) == 4
-    assert not current_state.has_cycles()
-    assert current_state.active()[0] == sdfg.start_state
-
-    # Graph of maps
-    gom = current_state.active()[1]
-    assert len(gom.nodes()) == 1
-    assert len(gom.edges()) == 0
-    assert gom.array_table is not None
-    assert all([dest == dace.DeviceType.CPU for dest in gom.array_table.values()])
-
     agent = DeviceAgent()
     terminated = current_state.terminated
     while not terminated:
@@ -289,21 +240,8 @@ def test_loop_with_branches():
     env = Environment(
         sdfg=sdfg, cpu_benchmark=host_benchmark, gpu_benchmark=device_benchmark
     )
+
     current_state = env.state
-
-    # Graph of states
-    assert len(current_state.nodes()) == 8
-    assert len(current_state.edges()) == 8
-    assert not current_state.has_cycles()
-    assert current_state.active()[0] == sdfg.start_state
-
-    # Graph of maps
-    gom = current_state.active()[1]
-    assert len(gom.nodes()) == 1
-    assert len(gom.edges()) == 0
-    assert gom.array_table is not None
-    assert all([dest == dace.DeviceType.CPU for dest in gom.array_table.values()])
-
     agent = DeviceAgent()
     terminated = current_state.terminated
     while not terminated:

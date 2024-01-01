@@ -17,6 +17,8 @@ from daisytuner.analysis.similarity.map_nest_model import MapNest, MapNestModel
 from daisytuner.analysis.similarity.benchmarking import CPUBenchmark, GPUBenchmark
 from daisytuner.transfer_tuning import TransferTuner
 
+from daisytuner.device_mapping.action import Action
+from daisytuner.device_mapping.state.storage_location import StorageLocation
 from daisytuner.device_mapping.state.graph_of_maps import GraphOfMaps
 from daisytuner.device_mapping.state.invalid_schedule_exception import (
     InvalidScheduleException,
@@ -170,7 +172,7 @@ class GraphOfStates(OrderedMultiDiGraph):
             # Set initial array table
             active_gom = self._graphs_of_maps[self._active_state]
             if self._active_state == self._start_state:
-                active_gom.init({arr: dace.DeviceType.CPU for arr in self._arrays})
+                active_gom.init({arr: StorageLocation.HOST for arr in self._arrays})
             else:
                 for pred in self.predecessors(self._active_state):
                     pred_gom = self._graphs_of_maps[pred]
@@ -214,9 +216,9 @@ class GraphOfStates(OrderedMultiDiGraph):
                 gom = self._graphs_of_maps[node]
                 for array in self._arrays:
                     if not self._sdfg.arrays[array].transient:
-                        if gom.array_table[array] != dace.DeviceType.CPU:
+                        if not gom.array_table[array].is_host():
                             raise InvalidScheduleException(
-                                f"{array} not on CPU in final state {node}"
+                                f"{array} not on host in final state {node}"
                             )
 
         self._active_state = None
@@ -232,6 +234,7 @@ class GraphOfStates(OrderedMultiDiGraph):
         for arr, desc in self._sdfg.arrays.items():
             schedule.add_datadesc(arr, copy.deepcopy(desc))
 
+        state_action_mapping = {}
         state_start_end_nodes = {}
         for node in self._visited:
             if node == self._final_state:
@@ -241,7 +244,9 @@ class GraphOfStates(OrderedMultiDiGraph):
             state_start_end_nodes[node] = (state_start, state_end)
 
             gom = self._graphs_of_maps[node]
-            gom.generate(schedule, state_start, state_end)
+            state_action_mapping.update(gom.generate(schedule, state_start, state_end))
+            state_action_mapping[state_start] = None
+            state_action_mapping[state_end] = None
 
         for edge in self._sdfg.edges():
             schedule.add_edge(
@@ -255,35 +260,50 @@ class GraphOfStates(OrderedMultiDiGraph):
 
         schedule.validate()
 
-        # TODO: Hacky
-        # Fuse states of data transfers
+        # State fusion to utilize concurrent utilization
+        # 1. Fuse same types of states
+        # - Fuses data transfers of same direction into same states
+        # - Fuses maps of same schedule into samee state
         while True:
             xforms = Optimizer(sdfg=schedule).get_pattern_matches(
                 patterns=[StateFusion]
             )
             xform = None
             for xf in xforms:
-                invalid = False
-                first_state = xf.first_state
-                for node in first_state.nodes():
-                    if isinstance(node, dace.nodes.MapEntry):
-                        invalid = True
-                        break
+                if (
+                    state_action_mapping[xf.first_state]
+                    == state_action_mapping[xf.second_state]
+                    or state_action_mapping[xf.second_state] is None
+                ):
+                    xform = xf
+                    break
 
-                if invalid:
-                    continue
-
-                second_state = xf.second_state
-                for node in second_state.nodes():
-                    if isinstance(node, dace.nodes.MapEntry):
-                        invalid = True
-                        break
-
-                if invalid:
-                    continue
-
-                xform = xf
+            if xform is None:
                 break
+
+            xform.apply(xform._sdfg, xform._sdfg)
+
+        # 2. Overlap data transfers and computation
+        while True:
+            xforms = Optimizer(sdfg=schedule).get_pattern_matches(
+                patterns=[StateFusion]
+            )
+            xform = None
+            for xf in xforms:
+                if (
+                    state_action_mapping[xf.first_state] == Action.COPY_HOST_TO_DEVICE
+                    and state_action_mapping[xf.second_state]
+                    == Action.SCHEDULE_MAP_NEST_HOST
+                ):
+                    xform = xf
+                    break
+                elif (
+                    state_action_mapping[xf.first_state] == Action.COPY_DEVICE_TO_HOST
+                    and state_action_mapping[xf.second_state]
+                    == Action.SCHEDULE_MAP_NEST_DEVICE
+                ):
+                    xform = xf
+                    break
 
             if xform is None:
                 break

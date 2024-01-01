@@ -1,7 +1,7 @@
 # Copyright 2022-2023 ETH Zurich and the Daisytuner authors.
 import dace
 
-from daisytuner.device_mapping.state import GraphOfStates
+from daisytuner.device_mapping.state import GraphOfStates, StorageLocation
 from daisytuner.device_mapping import Action
 
 
@@ -33,22 +33,22 @@ class GreedyAgent:
 
             if decision == Action.SCHEDULE_MAP_NEST_HOST:
                 for inp in active_map_nest.inputs():
-                    if active_gom.array_table[inp.data] != dace.DeviceType.CPU:
+                    if not active_gom.array_table[inp.data].is_host():
                         return Action.COPY_DEVICE_TO_HOST, inp.data
 
                 for outp in active_map_nest.outputs():
-                    if active_gom.array_table[outp.data] != dace.DeviceType.CPU:
+                    if not active_gom.array_table[outp.data].is_host():
                         return Action.COPY_DEVICE_TO_HOST, outp.data
 
                 self._last_schedule = decision
                 return decision, active_map
             else:
                 for inp in active_map_nest.inputs():
-                    if active_gom.array_table[inp.data] != dace.DeviceType.GPU:
+                    if not active_gom.array_table[inp.data].is_device():
                         return Action.COPY_HOST_TO_DEVICE, inp.data
 
                 for outp in active_map_nest.outputs():
-                    if active_gom.array_table[outp.data] != dace.DeviceType.GPU:
+                    if not active_gom.array_table[outp.data].is_device():
                         return Action.COPY_HOST_TO_DEVICE, outp.data
 
                 self._last_schedule = decision
@@ -56,7 +56,9 @@ class GreedyAgent:
 
         if self._last_schedule == Action.SCHEDULE_MAP_NEST_DEVICE:
             for array in active_gom.array_table:
-                if active_gom.array_table[array] != dace.DeviceType.CPU:
+                if active_gom.array_table[array] == StorageLocation.BOTH:
+                    return Action.FREE_DEVICE, array
+                elif active_gom.array_table[array] == StorageLocation.DEVICE:
                     return Action.COPY_DEVICE_TO_HOST, array
 
             self._last_schedule = None
@@ -67,7 +69,7 @@ class GreedyAgent:
                 if state.sdfg.arrays[array].transient:
                     continue
 
-                if active_gom.array_table[array] != dace.DeviceType.CPU:
+                if not active_gom.array_table[array].is_host():
                     return Action.COPY_DEVICE_TO_HOST, array
 
         return Action.NEXT_STATE, None

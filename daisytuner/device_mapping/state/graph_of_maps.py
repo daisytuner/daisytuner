@@ -7,6 +7,9 @@ from typing import Dict, List
 from dace.sdfg.graph import OrderedMultiDiGraph
 
 from daisytuner.analysis.similarity.map_nest import MapNest
+
+from daisytuner.device_mapping.action import Action
+from daisytuner.device_mapping.state.storage_location import StorageLocation
 from daisytuner.device_mapping.state.invalid_schedule_exception import (
     InvalidScheduleException,
 )
@@ -41,7 +44,7 @@ class GraphOfMaps(OrderedMultiDiGraph):
         # Scheduling structures
         self._frozen = False
         self._visited = set()
-        self._array_table = None
+        self._array_table: Dict[str, StorageLocation] = None
         self._last_actions = []
 
     @property
@@ -53,10 +56,10 @@ class GraphOfMaps(OrderedMultiDiGraph):
         return self._map_nests
 
     @property
-    def array_table(self) -> Dict[str, dace.DeviceType]:
+    def array_table(self) -> Dict[str, StorageLocation]:
         return self._array_table
 
-    def init(self, array_table: Dict[str, dace.DeviceType]) -> None:
+    def init(self, array_table: Dict[str, StorageLocation]) -> None:
         assert self._array_table is None
         self._array_table = copy.deepcopy(array_table)
 
@@ -67,36 +70,89 @@ class GraphOfMaps(OrderedMultiDiGraph):
         assert not self._frozen
         self._frozen = True
 
-    def schedule_map_nest(
-        self, node: dace.nodes.MapEntry, schedule: dace.DeviceType
-    ) -> None:
+    def schedule_map_nest_host(self, node: dace.nodes.MapEntry) -> None:
         assert not self.frozen()
         assert node in self._map_nests
 
         # Check if scheduling of map is valid
         map_nest = self._map_nests[node]
         for inp in map_nest.inputs():
-            if self._array_table[inp.data] != schedule:
+            location = self._array_table[inp.data]
+            if not location.is_host():
                 raise InvalidScheduleException(f"Dependencies not fulfilled for {node}")
 
         for outp in map_nest.outputs():
-            if self._array_table[outp.data] != schedule:
+            location = self._array_table[outp.data]
+            if not location.is_host():
                 raise InvalidScheduleException(f"Dependencies not fulfilled for {node}")
+
+        # Written array are now exclusive to schedule device
+        for outp in map_nest.outputs():
+            self._array_table[outp.data] = StorageLocation.HOST
 
         # Bookkeeping
         self._visited.add(node)
-        self._last_actions.append((node, schedule))
+        self._last_actions.append((node, Action.SCHEDULE_MAP_NEST_HOST))
 
-    def schedule_array(self, array: str, schedule: dace.DeviceType) -> None:
+    def schedule_map_nest_device(self, node: dace.nodes.MapEntry) -> None:
+        assert not self.frozen()
+        assert node in self._map_nests
+
+        # Check if scheduling of map is valid
+        map_nest = self._map_nests[node]
+        for inp in map_nest.inputs():
+            location = self._array_table[inp.data]
+            if not location.is_device():
+                raise InvalidScheduleException(f"Dependencies not fulfilled for {node}")
+
+        for outp in map_nest.outputs():
+            location = self._array_table[outp.data]
+            if not location.is_device():
+                raise InvalidScheduleException(f"Dependencies not fulfilled for {node}")
+
+        # Written array are now exclusive to schedule device
+        for outp in map_nest.outputs():
+            self._array_table[outp.data] = StorageLocation.DEVICE
+
+        # Bookkeeping
+        self._visited.add(node)
+        self._last_actions.append((node, Action.SCHEDULE_MAP_NEST_DEVICE))
+
+    def copy_host_to_device(self, array: str) -> None:
         assert not self.frozen()
         assert array in self._array_table
 
-        if schedule == self._array_table[array]:
-            raise InvalidScheduleException(f"{array} already on {schedule}")
-        self._array_table[array] = schedule
+        if self._array_table[array].is_device():
+            raise InvalidScheduleException(f"{array} already on device")
+
+        self._array_table[array] = StorageLocation.BOTH
 
         # Bookkeeping
-        self._last_actions.append((array, schedule))
+        self._last_actions.append((array, Action.COPY_HOST_TO_DEVICE))
+
+    def copy_device_to_host(self, array: str) -> None:
+        assert not self.frozen()
+        assert array in self._array_table
+
+        if self._array_table[array].is_host():
+            raise InvalidScheduleException(f"{array} already on host")
+
+        self._array_table[array] = StorageLocation.BOTH
+
+        # Bookkeeping
+        self._last_actions.append((array, Action.COPY_DEVICE_TO_HOST))
+
+    def free_device(self, array: str) -> None:
+        assert not self.frozen()
+        assert array in self._array_table
+
+        if self._array_table[array] != StorageLocation.BOTH:
+            raise InvalidScheduleException(f"Cannot free {array} on device")
+
+        self._array_table[array] = StorageLocation.HOST
+
+        # Bookkeeping
+        self._last_actions.append((array, Action.FREE_DEVICE))
 
     def active(self) -> List[dace.nodes.MapEntry]:
         active_nodes = []
@@ -120,26 +176,32 @@ class GraphOfMaps(OrderedMultiDiGraph):
     def generate(
         self, sdfg: dace.SDFG, start: dace.SDFGState, end: dace.SDFGState
     ) -> None:
+        state_action_mapping = {}
         last_state = start
-        for i, (item, schedule) in enumerate(self._last_actions):
+        for i, (item, action) in enumerate(self._last_actions):
             state = sdfg.add_state(self._state.name + f"_{i}")
-            if isinstance(item, dace.nodes.MapEntry):
-                if schedule == dace.DeviceType.CPU:
-                    self._generate_schedule_host(sdfg, state, item)
-                else:
-                    self._generate_schedule_device(sdfg, state, item)
-            elif isinstance(item, str):
-                if schedule == dace.DeviceType.CPU:
-                    self._generate_copy_device_to_host(sdfg, state, item)
-                else:
-                    self._generate_copy_host_to_device(sdfg, state, item)
+
+            if action == Action.SCHEDULE_MAP_NEST_HOST:
+                self._generate_schedule_host(sdfg, state, item)
+            elif action == Action.SCHEDULE_MAP_NEST_DEVICE:
+                self._generate_schedule_device(sdfg, state, item)
+            elif action == Action.COPY_HOST_TO_DEVICE:
+                self._generate_copy_host_to_device(sdfg, state, item)
+            elif action == Action.COPY_DEVICE_TO_HOST:
+                self._generate_copy_device_to_host(sdfg, state, item)
+            elif action == Action.FREE_DEVICE:
+                # TODO
+                pass
             else:
                 raise ValueError(f"Invalid action {item}")
 
             sdfg.add_edge(last_state, state, dace.InterstateEdge())
             last_state = state
+            state_action_mapping[state] = action
 
         sdfg.add_edge(last_state, end, dace.InterstateEdge())
+
+        return state_action_mapping
 
     def _generate_schedule_host(
         self, sdfg: dace.SDFG, state: dace.SDFGState, item: dace.nodes.MapEntry
