@@ -38,6 +38,14 @@ class MapInlining(ppl.Pass):
                     scope_graph: dace.sdfg.ScopeSubgraphView = nstate.scope_subgraph(
                         node
                     )
+                    if any(
+                        [
+                            isinstance(n, dace.nodes.MapEntry)
+                            for n in scope_graph.nodes()
+                            if node != n
+                        ]
+                    ):
+                        continue
 
                     for node_ in scope_graph.nodes():
                         if not isinstance(node_, dace.nodes.NestedSDFG):
@@ -69,9 +77,7 @@ class MapInlining(ppl.Pass):
                         xform.map_exit = scope_exit
                         if xform.can_be_applied(state=nstate, sdfg=nsdfg, expr_index=0):
                             xform.apply(nstate, nsdfg)
-                            sdfg.validate()
                             return len(nsdfg.states())
 
         sdfg.apply_transformations_repeated(StateFusion, validate=False)
-        sdfg.validate()
         return None

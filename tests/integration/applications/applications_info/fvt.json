@@ -1,0 +1,11 @@
+{
+    "application": {
+        "name": "FVT",
+        "init": {
+            "func_name": "initialize",
+            "input_args": [],
+            "output_args": []
+        },
+        "input_args": []
+    }
+}

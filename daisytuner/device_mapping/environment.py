@@ -1,14 +1,18 @@
 # Copyright 2022-2023 ETH Zurich and the Daisytuner authors.
+import copy
 import dace
+import json
 import gymnasium as gym
 
-from typing import Tuple, Any
+from typing import Tuple, Any, List
 
 from daisytuner.analysis.similarity import MapNestModel
 from daisytuner.analysis.similarity.benchmarking import CPUBenchmark, GPUBenchmark
 from daisytuner.analysis.performance_modeling import PerformanceModel
 
 from daisytuner.transfer_tuning.transfer_tuner import TransferTuner
+
+from daisytuner.transformations import MapWrapping, ComponentFusion
 
 from daisytuner.device_mapping.action import Action
 from daisytuner.device_mapping.state import GraphOfStates, InvalidScheduleException
@@ -52,9 +56,15 @@ class Environment(gym.Env):
             else IdentityTransferTuner(),
         )
 
+        self._history = []
+
     @property
     def state(self) -> GraphOfStates:
         return self._state
+
+    @property
+    def history(self) -> List:
+        return self._history
 
     def step(
         self, action: Tuple[Action, Any]
@@ -70,41 +80,52 @@ class Environment(gym.Env):
 
         # Update environment
         action_type, item = action
-        # try:
-        if action_type == Action.NEXT_STATE:
-            self._state.next_state()
-        elif action_type == Action.SCHEDULE_MAP_NEST_HOST:
-            _, active_gom = self._state.active()
-            active_gom.schedule_map_nest_host(item)
-        elif action_type == Action.SCHEDULE_MAP_NEST_DEVICE:
-            _, active_gom = self._state.active()
-            active_gom.schedule_map_nest_device(item)
-        elif action_type == Action.COPY_HOST_TO_DEVICE:
-            _, active_gom = self._state.active()
-            active_gom.copy_host_to_device(item)
-        elif action_type == Action.COPY_DEVICE_TO_HOST:
-            _, active_gom = self._state.active()
-            active_gom.copy_device_to_host(item)
-        elif action_type == Action.FREE_DEVICE:
-            _, active_gom = self._state.active()
-            active_gom.free_device(item)
-        else:
-            raise ValueError(f"Invalid action type {action_type}")
-
-        # Check if game has ended
-        terminated = self._state.terminated
-        if terminated:
-            schedule = self._state.generate()
-            info["schedule"] = schedule
-
-            if self._reward_function is not None:
-                reward = self._reward_function.compute(schedule)
+        self._history.append(
+            [
+                json.dumps(action_type),
+                item.to_json(parent=self._state.active()[0])
+                if isinstance(item, dace.nodes.Node)
+                else json.dumps(item),
+            ]
+        )
+        try:
+            if action_type == Action.NEXT_STATE:
+                self._state.next_state()
+            elif action_type == Action.SCHEDULE_MAP_NEST_HOST:
+                _, active_gom = self._state.active()
+                active_gom.schedule_map_nest_host(item)
+            elif action_type == Action.SCHEDULE_MAP_NEST_DEVICE:
+                _, active_gom = self._state.active()
+                active_gom.schedule_map_nest_device(item)
+            elif action_type == Action.COPY_HOST_TO_DEVICE:
+                _, active_gom = self._state.active()
+                active_gom.copy_host_to_device(item)
+            elif action_type == Action.COPY_DEVICE_TO_HOST:
+                _, active_gom = self._state.active()
+                active_gom.copy_device_to_host(item)
+            elif action_type == Action.FREE_DEVICE:
+                _, active_gom = self._state.active()
+                active_gom.free_device(item)
+            elif action_type == Action.FREE_HOST:
+                _, active_gom = self._state.active()
+                active_gom.free_host(item)
             else:
-                reward = 1
-        # except InvalidScheduleException as e:
-        #     info["error"] = e
-        #     terminated = True
-        #     reward = -1
+                raise ValueError(f"Invalid action type {action_type}")
+
+            # Check if game has ended
+            terminated = self._state.terminated
+            if terminated:
+                schedule = self._state.generate()
+                info["schedule"] = schedule
+
+                if self._reward_function is not None:
+                    reward = self._reward_function.compute(schedule)
+                else:
+                    reward = 1
+        except InvalidScheduleException as e:
+            info["error"] = e
+            terminated = True
+            reward = -1
 
         return self._state, reward, terminated, False, info
 
@@ -119,7 +140,7 @@ class Environment(gym.Env):
         )
         self._state.init(
             host_model=MapNestModel.create(dace.DeviceType.CPU),
-            device_model=MapNestModel.create(dace.DeviceType.CPU),
+            device_model=MapNestModel.create(dace.DeviceType.GPU),
             transfer_tuner=self._transfer_tuner
             if self._transfer_tuner is not None
             else IdentityTransferTuner(),
@@ -128,3 +149,15 @@ class Environment(gym.Env):
 
     def render(self) -> None:
         raise NotImplementedError
+
+    @staticmethod
+    def preprocess(sdfg: dace.SDFG) -> dace.SDFG:
+        sdfg_ = copy.deepcopy(sdfg)
+
+        # Convert top-level code into kernels
+        sdfg_.apply_transformations_repeated(MapWrapping)
+
+        # Fuse components across states with happens-before memlets
+        sdfg_.apply_transformations_repeated(ComponentFusion, validate=False)
+
+        return sdfg_

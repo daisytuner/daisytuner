@@ -1,6 +1,6 @@
 # Copyright 2022-2023 ETH Zurich and the Daisytuner authors.
 from daisytuner.transformations import blas
-from daisytuner.transformations.component_fission import ComponentFission
+from daisytuner.transformations.component_fusion import ComponentFusion
 from daisytuner.transformations.copy_to_tasklet import CopyToTasklet
 from daisytuner.transformations.greedy_tasklet_fusion import GreedyTaskletFusion
 from daisytuner.transformations.inline_map import InlineMap

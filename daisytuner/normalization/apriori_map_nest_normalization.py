@@ -53,10 +53,6 @@ class APrioriMapNestNormalization(ppl.Pass):
         dace.libraries.blas.default_implementation = "pure"
         sdfg.expand_library_nodes(recursive=True)
 
-        for sym, val in list(sdfg.constants.items()):
-            for nsdfg in sdfg.all_sdfgs_recursive():
-                nsdfg.replace(sym, val)
-
         pipeline = MapCompactForm()
         pipeline.apply_pass(sdfg, results)
 
@@ -72,11 +68,12 @@ class APrioriMapNestNormalization(ppl.Pass):
         # - Simplification
         # - Compact form
         # - (Actual) map fissioning
+        sdfg.simplify()
         pipeline = FixedPointPipeline(
             [
-                SimplifyPass(),
                 DataflowMaximization(),
                 MapInlining(),
+                SimplifyPass(),
                 MapCompactForm(),
                 MaximalMapFission(),
             ]

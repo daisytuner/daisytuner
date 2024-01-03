@@ -25,9 +25,23 @@ class MapNest(StateSubgraphView):
         subgraph_nodes.add(map_exit)
 
         for edge in state.in_edges(root):
-            subgraph_nodes.add(edge.src)
+            # Ignore happens-before memlets
+            if edge.data.data is None:
+                continue
+
+            for edge_ in state.memlet_path(edge):
+                subgraph_nodes.add(edge_.src)
+
+            access_node: dace.nodes.AccessNode = state.memlet_path(edge)[0].src
+            if "views" in access_node.in_connectors:
+                subgraph_nodes.add(state.predecessors(access_node)[0])
         for edge in state.out_edges(map_exit):
-            subgraph_nodes.add(edge.dst)
+            for edge_ in state.memlet_path(edge):
+                subgraph_nodes.add(edge_.dst)
+
+            access_node: dace.nodes.AccessNode = state.memlet_path(edge)[-1].dst
+            if "views" in access_node.out_connectors:
+                subgraph_nodes.add(state.successors(access_node)[0])
 
         super().__init__(state, list(subgraph_nodes))
         self._root = root

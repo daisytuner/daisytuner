@@ -19,6 +19,10 @@ class DeviceAgent:
                 if not active_gom.array_table[array].is_device():
                     return Action.COPY_HOST_TO_DEVICE, array
 
+            for array in active_gom.array_table:
+                if active_gom.array_table[array].is_host():
+                    return Action.FREE_HOST, array
+
             self._copied = True
 
         # Schedule

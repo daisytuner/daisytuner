@@ -1,0 +1,11 @@
+{
+    "application": {
+        "name": "BERT",
+        "init": {
+            "func_name": "initialize",
+            "input_args": [],
+            "output_args": ["input_ids", "token_type_ids", "attention_mask"]
+        },
+        "input_args": ["input_ids", "token_type_ids", "attention_mask"]
+    }
+}

@@ -44,6 +44,8 @@ class StrideMinimization(ppl.ScopePass):
 
         s_map = scope.map
         n_params = s_map.get_param_num()
+        if n_params > 4:
+            return None
 
         # Overapproximation
         parent_maps = [scope]

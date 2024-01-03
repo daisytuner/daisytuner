@@ -44,19 +44,29 @@ def random_arguments(sdfg: SDFG) -> Dict:
         symbols[k] = random.randint(1, 4)
 
     arguments = {**symbols}
-    for state in sdfg.nodes():
-        for dnode in state.data_nodes():
-            if dnode.data in arguments:
-                continue
+    # for state in sdfg.nodes():
+    #     for dnode in state.data_nodes():
+    #         if dnode.data in arguments:
+    #             continue
 
-            array = sdfg.arrays[dnode.data]
-            if not array.transient:
-                np_array = _random_container(array, symbols_map=symbols)
-                arguments[dnode.data] = (
-                    np_array
-                    if not isinstance(np_array, np.ndarray)
-                    else np.copy(np_array)
-                )
+    #         array = sdfg.arrays[dnode.data]
+    #         if not array.transient:
+    #             np_array = _random_container(array, symbols_map=symbols)
+    #             arguments[dnode.data] = (
+    #                 np_array
+    #                 if not isinstance(np_array, np.ndarray)
+    #                 else np.copy(np_array)
+    #             )
+
+    for array, desc in sdfg.arrays.items():
+        if array in arguments:
+            continue
+
+        if not desc.transient:
+            np_array = _random_container(desc, symbols_map=symbols)
+            arguments[array] = (
+                np_array if not isinstance(np_array, np.ndarray) else np.copy(np_array)
+            )
 
     return arguments
 

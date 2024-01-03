@@ -35,11 +35,13 @@ class GraphOfMaps(OrderedMultiDiGraph):
         # 2. Edges = data dependencies
         for node in self._map_nests:
             exit_node = state.exit_node(node)
-            for oedge in state.out_edges(exit_node):
-                assert isinstance(oedge.dst, dace.nodes.AccessNode)
-                for oedge_ in state.out_edges(oedge.dst):
-                    assert isinstance(oedge_.dst, dace.nodes.MapEntry)
-                    self.add_edge(node, oedge_.dst, data=None)
+            queue = list(state.out_edges(exit_node))
+            while queue:
+                edge = queue.pop(0)
+                if isinstance(edge.dst, dace.nodes.MapEntry):
+                    self.add_edge(node, edge.dst, data=None)
+                else:
+                    queue.extend(state.out_edges(edge.dst))
 
         # Scheduling structures
         self._frozen = False
@@ -154,6 +156,18 @@ class GraphOfMaps(OrderedMultiDiGraph):
         # Bookkeeping
         self._last_actions.append((array, Action.FREE_DEVICE))
 
+    def free_host(self, array: str) -> None:
+        assert not self.frozen()
+        assert array in self._array_table
+
+        if self._array_table[array] != StorageLocation.BOTH:
+            raise InvalidScheduleException(f"Cannot free {array} on host")
+
+        self._array_table[array] = StorageLocation.DEVICE
+
+        # Bookkeeping
+        self._last_actions.append((array, Action.FREE_HOST))
+
     def active(self) -> List[dace.nodes.MapEntry]:
         active_nodes = []
         for node in self.nodes():
@@ -190,6 +204,9 @@ class GraphOfMaps(OrderedMultiDiGraph):
             elif action == Action.COPY_DEVICE_TO_HOST:
                 self._generate_copy_device_to_host(sdfg, state, item)
             elif action == Action.FREE_DEVICE:
+                # TODO
+                pass
+            elif action == Action.FREE_HOST:
                 # TODO
                 pass
             else:

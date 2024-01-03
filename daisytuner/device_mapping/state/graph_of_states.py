@@ -35,7 +35,9 @@ class GraphOfStates(OrderedMultiDiGraph):
         # Create DAG from top-level states
         self._arrays = set()
         self._graphs_of_maps: Dict[dace.SDFGState, GraphOfMaps] = {}
-        for state in self._sdfg.states():
+
+        dfs_tree = nx.dfs_tree(self._sdfg, source=self._sdfg.start_state)
+        for state in dfs_tree.nodes():
             self.add_node(state)
             self._graphs_of_maps[state] = GraphOfMaps(state=state)
 
@@ -44,29 +46,13 @@ class GraphOfStates(OrderedMultiDiGraph):
                     continue
                 self._arrays.add(dnode.data)
 
-        for edge in self._sdfg.edges():
-            self.add_edge(edge.src, edge.dst, copy.deepcopy(edge.data))
+        for src, dst in dfs_tree.edges():
+            self.add_edge(src, dst, data=None)
 
-        # Remove cycles
-        nodes_oNodes_exits = find_loop_guards_tails_exits(self._nx)
-        for node, oNode, exits in nodes_oNodes_exits:
-            self.remove_edge(self.edges_between(oNode, node)[0])
-            for e in exits:
-                if len(self.edges_between(oNode, e)) == 0:
-                    self.add_edge(oNode, e, dace.InterstateEdge())
-                if len(self.edges_between(node, e)) > 0:
-                    self.remove_edge(self.edges_between(node, e)[0])
-
-        # Define start and final state
         self._start_state = self._sdfg.start_state
-        self._final_state = dace.SDFGState(label="final_state", sdfg=self)
-        self.add_node(self._final_state)
-
-        self._terminal_states = set()
-        for state in self.nodes():
-            if len(self.out_edges(state)) == 0 and state != self._final_state:
-                self.add_edge(state, self._final_state, dace.InterstateEdge())
-                self._terminal_states.add(state)
+        self._terminal_states = set(
+            [node for node in self._sdfg.states() if self._sdfg.out_degree(node) == 0]
+        )
 
         # Map Nest Schedules
         self._cpu_benchmark = cpu_benchmark
@@ -164,7 +150,7 @@ class GraphOfStates(OrderedMultiDiGraph):
     def _walk(self):
         for node in nx.dfs_preorder_nodes(self, source=self._start_state):
             # Skip visited states and artificial final state
-            if node == self._final_state or self._graphs_of_maps[node].frozen():
+            if self._graphs_of_maps[node].frozen():
                 continue
 
             self._active_state = node
@@ -211,15 +197,14 @@ class GraphOfStates(OrderedMultiDiGraph):
                     )
 
         # All non-transients are moved back to CPU
-        for node in self._sdfg.states():
-            if self._sdfg.out_degree(node) == 0:
-                gom = self._graphs_of_maps[node]
-                for array in self._arrays:
-                    if not self._sdfg.arrays[array].transient:
-                        if not gom.array_table[array].is_host():
-                            raise InvalidScheduleException(
-                                f"{array} not on host in final state {node}"
-                            )
+        for node in self._terminal_states:
+            gom = self._graphs_of_maps[node]
+            for array in self._arrays:
+                if not self._sdfg.arrays[array].transient:
+                    if not gom.array_table[array].is_host():
+                        raise InvalidScheduleException(
+                            f"{array} not on host in final state {node}"
+                        )
 
         self._active_state = None
         self._terminated = True
@@ -237,8 +222,6 @@ class GraphOfStates(OrderedMultiDiGraph):
         state_action_mapping = {}
         state_start_end_nodes = {}
         for node in self._visited:
-            if node == self._final_state:
-                continue
             state_start = schedule.add_state(node.label + "_start")
             state_end = schedule.add_state(node.label + "_end")
             state_start_end_nodes[node] = (state_start, state_end)
