@@ -3,9 +3,7 @@ import copy
 import dace
 import networkx as nx
 
-from typing import Tuple, Dict, Set
-from p_tqdm import p_map
-from torch_geometric.data import Batch
+from typing import Tuple, Dict
 
 from dace.sdfg.work_depth_analysis.work_depth import find_loop_guards_tails_exits
 from dace.sdfg.graph import OrderedMultiDiGraph
@@ -27,7 +25,13 @@ from daisytuner.device_mapping.state.invalid_schedule_exception import (
 
 class GraphOfStates(OrderedMultiDiGraph):
     def __init__(
-        self, sdfg: dace.SDFG, cpu_benchmark: CPUBenchmark, gpu_benchmark: GPUBenchmark
+        self,
+        sdfg: dace.SDFG,
+        cpu_benchmark: CPUBenchmark,
+        gpu_benchmark: GPUBenchmark,
+        host_model: MapNestModel,
+        device_model: MapNestModel,
+        transfer_tuner: TransferTuner,
     ):
         super().__init__()
         self._sdfg = sdfg
@@ -39,7 +43,14 @@ class GraphOfStates(OrderedMultiDiGraph):
         dfs_tree = nx.dfs_tree(self._sdfg, source=self._sdfg.start_state)
         for state in dfs_tree.nodes():
             self.add_node(state)
-            self._graphs_of_maps[state] = GraphOfMaps(state=state)
+            self._graphs_of_maps[state] = GraphOfMaps(
+                state=state,
+                cpu_benchmark=cpu_benchmark,
+                gpu_benchmark=gpu_benchmark,
+                host_model=host_model,
+                device_model=device_model,
+                transfer_tuner=transfer_tuner,
+            )
 
             for dnode in state.data_nodes():
                 if state.entry_node(dnode) is not None:
@@ -54,16 +65,15 @@ class GraphOfStates(OrderedMultiDiGraph):
             [node for node in self._sdfg.states() if self._sdfg.out_degree(node) == 0]
         )
 
-        # Map Nest Schedules
-        self._cpu_benchmark = cpu_benchmark
-        self._gpu_benchmark = gpu_benchmark
-        self._map_nest_schedules: Dict[MapNest, Dict] = None
-
         # Scheduling structures
         self._terminated = False
         self._active_state: dace.SDFGState = None
         self._visited = []
         self._walker = None
+
+        # Move to first state
+        self._walker = self._walk()
+        self.next_state()
 
     @property
     def sdfg(self) -> dace.SDFG:
@@ -83,69 +93,7 @@ class GraphOfStates(OrderedMultiDiGraph):
         return next(self._walker)
 
     def map_nest_schedules(self) -> Dict[MapNest, Dict]:
-        return self._map_nest_schedules
-
-    def init(
-        self,
-        host_model: MapNestModel,
-        device_model: MapNestModel,
-        transfer_tuner: TransferTuner,
-    ) -> None:
-        def preprocess(map_nest: MapNest):
-            map_nest_encoding_cpu = host_model.preprocess(map_nest, self._cpu_benchmark)
-            map_nest_encoding_gpu = device_model.preprocess(
-                map_nest, self._gpu_benchmark
-            )
-            assert not map_nest_encoding_cpu.is_data_dependent
-            return map_nest_encoding_cpu, map_nest_encoding_gpu
-
-        # Create embeddings and runtime estimates
-        all_map_nests = [
-            map_nest
-            for gom in self._graphs_of_maps.values()
-            for map_nest in gom.map_nests.values()
-        ]
-        # encodings = p_map(preprocess, all_map_nests)
-        encodings = list(map(preprocess, all_map_nests))
-        host_encodings, device_encodings = zip(*encodings)
-        host_batch = Batch.from_data_list(host_encodings)
-        device_batch = Batch.from_data_list(device_encodings)
-        preds_host = host_model.predict_batch(host_batch)
-        preds_device = device_model.predict_batch(device_batch)
-
-        # Query best schedules
-        host_schedules = transfer_tuner.predict(preds_host, dace.DeviceType.CPU)
-        device_schedules = transfer_tuner.predict(preds_device, dace.DeviceType.GPU)
-
-        # Store results in global dict
-        self._map_nest_schedules = {}
-        for i in range(len(all_map_nests)):
-            map_nest = all_map_nests[i]
-            runtime_host, embedding_host, node_embeddings_host = preds_host[i]
-            runtime_device, embedding_device, node_embeddings_device = preds_device[i]
-            schedule_host, speedup_host = host_schedules[i]
-            schedule_device, speedup_device = device_schedules[i]
-
-            self._map_nest_schedules[map_nest] = {
-                "host": {
-                    "runtime": runtime_host,
-                    "embedding": embedding_host,
-                    "node_embeddings": node_embeddings_host,
-                    "best_schedule": schedule_host,
-                    "speedup": speedup_host,
-                },
-                "device": {
-                    "runtime": runtime_device,
-                    "embedding": embedding_device,
-                    "node_embeddings": node_embeddings_device,
-                    "best_schedule": schedule_device,
-                    "speedup": speedup_device,
-                },
-            }
-
-        # Move to first state
-        self._walker = self._walk()
-        self.next_state()
+        return self._graphs_of_maps[self._active_state].map_nest_schedules
 
     def _walk(self):
         for node in nx.dfs_preorder_nodes(self, source=self._start_state):

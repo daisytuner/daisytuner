@@ -2,11 +2,20 @@
 import dace
 import copy
 
-from typing import Dict, List
+from typing import Dict, List, Tuple
+
+from p_tqdm import p_map
+from torch_geometric.data import Batch
 
 from dace.sdfg.graph import OrderedMultiDiGraph
+from dace.sdfg.state import StateSubgraphView
+from dace.transformation.optimizer import Optimizer
+from dace.transformation.dataflow import OTFMapFusion
+from dace.transformation.subgraph import SubgraphFusion
 
-from daisytuner.analysis.similarity.map_nest import MapNest
+from daisytuner.analysis.similarity.map_nest_model import MapNest, MapNestModel
+from daisytuner.analysis.similarity.benchmarking import CPUBenchmark, GPUBenchmark
+from daisytuner.transfer_tuning import TransferTuner
 
 from daisytuner.device_mapping.action import Action
 from daisytuner.device_mapping.state.storage_location import StorageLocation
@@ -16,38 +25,34 @@ from daisytuner.device_mapping.state.invalid_schedule_exception import (
 
 
 class GraphOfMaps(OrderedMultiDiGraph):
-    def __init__(self, state: dace.SDFGState) -> None:
+    def __init__(
+        self,
+        state: dace.SDFGState,
+        cpu_benchmark: CPUBenchmark,
+        gpu_benchmark: GPUBenchmark,
+        host_model: MapNestModel,
+        device_model: MapNestModel,
+        transfer_tuner: TransferTuner,
+    ) -> None:
         super().__init__()
         self._state = state
-
-        # 1. Nodes = map nests
-        self._map_nests: Dict[dace.nodes.MapEntry, MapNest] = {}
-        for node in state.nodes():
-            if not isinstance(node, dace.nodes.MapEntry):
-                continue
-            if not state.entry_node(node) is None:
-                continue
-
-            map_nest = MapNest(state=state, root=node)
-            self._map_nests[node] = map_nest
-            self.add_node(node)
-
-        # 2. Edges = data dependencies
-        for node in self._map_nests:
-            exit_node = state.exit_node(node)
-            queue = list(state.out_edges(exit_node))
-            while queue:
-                edge = queue.pop(0)
-                if isinstance(edge.dst, dace.nodes.MapEntry):
-                    self.add_edge(node, edge.dst, data=None)
-                else:
-                    queue.extend(state.out_edges(edge.dst))
+        self._host_model = host_model
+        self._device_model = device_model
+        self._transfer_tuner = transfer_tuner
+        self._cpu_benchmark = cpu_benchmark
+        self._gpu_benchmark = gpu_benchmark
 
         # Scheduling structures
         self._frozen = False
         self._visited = set()
         self._array_table: Dict[str, StorageLocation] = None
         self._last_actions = []
+        self._fusable_maps = {}
+        self._map_nest_schedules = {}
+
+        self._init_graph()
+        self._init_map_nest_schedules()
+        self._init_fusable_maps()
 
     @property
     def state(self) -> dace.SDFGState:
@@ -60,6 +65,10 @@ class GraphOfMaps(OrderedMultiDiGraph):
     @property
     def array_table(self) -> Dict[str, StorageLocation]:
         return self._array_table
+
+    @property
+    def map_nest_schedules(self):
+        return self._map_nest_schedules
 
     def init(self, array_table: Dict[str, StorageLocation]) -> None:
         assert self._array_table is None
@@ -168,6 +177,20 @@ class GraphOfMaps(OrderedMultiDiGraph):
         # Bookkeeping
         self._last_actions.append((array, Action.FREE_HOST))
 
+    def fuse_maps(self, maps: Tuple[dace.nodes.MapEntry, dace.nodes.MapEntry]) -> None:
+        if not maps in self._fusable_maps:
+            raise InvalidScheduleException(f"Cannot fuse {maps}")
+
+        if isinstance(self._fusable_maps[maps], OTFMapFusion):
+            self._fusable_maps[maps].apply(graph=self._state, sdfg=self._state.parent)
+        else:
+            self._fusable_maps[maps].apply(sdfg=self._state.parent)
+
+        # Reset maps
+        self._init_graph()
+        self._init_map_nest_schedules()
+        self._init_fusable_maps()
+
     def active(self) -> List[dace.nodes.MapEntry]:
         active_nodes = []
         for node in self.nodes():
@@ -208,6 +231,8 @@ class GraphOfMaps(OrderedMultiDiGraph):
                 pass
             elif action == Action.FREE_HOST:
                 # TODO
+                pass
+            elif action == Action.FUSE_MAPS:
                 pass
             else:
                 raise ValueError(f"Invalid action {item}")
@@ -322,3 +347,131 @@ class GraphOfMaps(OrderedMultiDiGraph):
             None,
             dace.Memlet.from_array(device_array, device_desc),
         )
+
+    def _init_graph(self):
+        # Clear
+        for edge in self.edges():
+            self.remove_edge(edge)
+        for node in self.nodes():
+            self.remove_node(node)
+
+        # 1. Nodes = map nests
+        self._map_nests: Dict[dace.nodes.MapEntry, MapNest] = {}
+        for node in self._state.nodes():
+            if not isinstance(node, dace.nodes.MapEntry):
+                continue
+            if not self._state.entry_node(node) is None:
+                continue
+
+            map_nest = MapNest(state=self._state, root=node)
+            self._map_nests[node] = map_nest
+            self.add_node(node)
+
+        # 2. Edges = data dependencies
+        for node in self._map_nests:
+            exit_node = self._state.exit_node(node)
+            queue = list(self._state.out_edges(exit_node))
+            while queue:
+                edge = queue.pop(0)
+                if isinstance(edge.dst, dace.nodes.MapEntry):
+                    self.add_edge(node, edge.dst, data=None)
+                else:
+                    queue.extend(self._state.out_edges(edge.dst))
+
+    def _init_map_nest_schedules(self):
+        self._map_nest_schedules.clear()
+
+        def preprocess(map_nest: MapNest):
+            map_nest_encoding_cpu = self._host_model.preprocess(
+                map_nest, self._cpu_benchmark
+            )
+            map_nest_encoding_gpu = self._device_model.preprocess(
+                map_nest, self._gpu_benchmark
+            )
+            assert not map_nest_encoding_cpu.is_data_dependent
+            return map_nest_encoding_cpu, map_nest_encoding_gpu
+
+        # Create embeddings and runtime estimates
+        all_map_nests = list(self._map_nests.values())
+        if not all_map_nests:
+            return
+
+        # encodings = p_map(preprocess, all_map_nests)
+        encodings = list(map(preprocess, all_map_nests))
+        host_encodings, device_encodings = zip(*encodings)
+        host_batch = Batch.from_data_list(host_encodings)
+        device_batch = Batch.from_data_list(device_encodings)
+        preds_host = self._host_model.predict_batch(host_batch)
+        preds_device = self._device_model.predict_batch(device_batch)
+
+        # Query best schedules
+        host_schedules = self._transfer_tuner.predict(preds_host, dace.DeviceType.CPU)
+        device_schedules = self._transfer_tuner.predict(
+            preds_device, dace.DeviceType.GPU
+        )
+
+        # Store results in global dict
+        self._map_nest_schedules = {}
+        for i in range(len(all_map_nests)):
+            map_nest = all_map_nests[i]
+            runtime_host, embedding_host, node_embeddings_host = preds_host[i]
+            runtime_device, embedding_device, node_embeddings_device = preds_device[i]
+            schedule_host, speedup_host = host_schedules[i]
+            schedule_device, speedup_device = device_schedules[i]
+
+            self._map_nest_schedules[map_nest] = {
+                "host": {
+                    "runtime": runtime_host,
+                    "embedding": embedding_host,
+                    "node_embeddings": node_embeddings_host,
+                    "best_schedule": schedule_host,
+                    "speedup": speedup_host,
+                },
+                "device": {
+                    "runtime": runtime_device,
+                    "embedding": embedding_device,
+                    "node_embeddings": node_embeddings_device,
+                    "best_schedule": schedule_device,
+                    "speedup": speedup_device,
+                },
+            }
+
+    def _init_fusable_maps(self):
+        self._fusable_maps.clear()
+
+        # OTFMapFusion
+        otf_fusable_maps = Optimizer(sdfg=self._state.parent).get_pattern_matches(
+            states=[self._state], patterns=[OTFMapFusion]
+        )
+        for xform in otf_fusable_maps:
+            first_map_entry = self._state.entry_node(xform.first_map_exit)
+            second_map_entry = xform.second_map_entry
+
+            if first_map_entry in self._visited:
+                continue
+            if second_map_entry in self._visited:
+                continue
+
+            self._fusable_maps[(first_map_entry, second_map_entry)] = xform
+
+        # SubgraphFusion
+        for map_entry, map_nest in self._map_nests.items():
+            if map_entry in self._visited:
+                continue
+
+            for map_entry_, map_nest_ in self._map_nests.items():
+                if map_entry_ in self._visited:
+                    continue
+                if map_entry == map_entry_:
+                    continue
+
+                nodes = set(map_nest.nodes()).union(map_nest_.nodes())
+                subgraph_view = StateSubgraphView(self._state, nodes)
+                xform = SubgraphFusion()
+                xform.setup_match(
+                    subgraph_view,
+                    sdfg_id=self._state.parent.sdfg_id,
+                    state_id=self._state.parent.node_id(self._state),
+                )
+                if xform.can_be_applied(self._state.parent, subgraph_view):
+                    self._fusable_maps[(map_entry, map_entry_)] = xform

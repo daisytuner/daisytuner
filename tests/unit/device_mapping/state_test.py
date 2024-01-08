@@ -32,8 +32,8 @@ def test_single_state():
     current_state = env.state
 
     # Graph of states
-    assert len(current_state.nodes()) == 2
-    assert len(current_state.edges()) == 1
+    assert len(current_state.nodes()) == 1
+    assert len(current_state.edges()) == 0
     assert current_state.active()[0] == sdfg.start_state
 
     # Graph of maps
@@ -75,8 +75,8 @@ def test_multiple_map_nests():
     current_state = env.state
 
     # Graph of states
-    assert len(current_state.nodes()) == 2
-    assert len(current_state.edges()) == 1
+    assert len(current_state.nodes()) == 1
+    assert len(current_state.edges()) == 0
     assert current_state.active()[0] == sdfg.start_state
 
     # Graph of maps
@@ -116,8 +116,8 @@ def test_two_states():
     current_state = env.state
 
     # Graph of states
-    assert len(current_state.nodes()) == 3
-    assert len(current_state.edges()) == 2
+    assert len(current_state.nodes()) == 2
+    assert len(current_state.edges()) == 1
     assert current_state.active()[0] == sdfg.start_state
 
     # Graph of maps
@@ -158,8 +158,8 @@ def test_loop():
     current_state = env.state
 
     # Graph of states
-    assert len(current_state.nodes()) == 5
-    assert len(current_state.edges()) == 4
+    assert len(current_state.nodes()) == 4
+    assert len(current_state.edges()) == 3
     assert not current_state.has_cycles()
     assert current_state.active()[0] == sdfg.start_state
 
@@ -208,8 +208,8 @@ def test_loop_with_branches():
     current_state = env.state
 
     # Graph of states
-    assert len(current_state.nodes()) == 8
-    assert len(current_state.edges()) == 8
+    assert len(current_state.nodes()) == 7
+    assert len(current_state.edges()) == 6
     assert not current_state.has_cycles()
     assert current_state.active()[0] == sdfg.start_state
 
@@ -219,3 +219,7 @@ def test_loop_with_branches():
     assert len(gom.edges()) == 0
     assert gom.array_table is not None
     assert all([dest == StorageLocation.HOST for dest in gom.array_table.values()])
+
+
+if __name__ == "__main__":
+    test_single_state()

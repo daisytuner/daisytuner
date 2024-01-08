@@ -47,8 +47,6 @@ class Environment(gym.Env):
             self._sdfg,
             cpu_benchmark=self._cpu_benchmark,
             gpu_benchmark=self._gpu_benchmark,
-        )
-        self._state.init(
             host_model=MapNestModel.create(dace.DeviceType.CPU),
             device_model=MapNestModel.create(dace.DeviceType.GPU),
             transfer_tuner=self._transfer_tuner
@@ -80,14 +78,28 @@ class Environment(gym.Env):
 
         # Update environment
         action_type, item = action
-        self._history.append(
-            [
-                json.dumps(action_type),
-                item.to_json(parent=self._state.active()[0])
-                if isinstance(item, dace.nodes.Node)
-                else json.dumps(item),
-            ]
-        )
+        if isinstance(item, dace.nodes.Node):
+            self._history.append(
+                [json.dumps(action_type), item.to_json(parent=self._state.active()[0])]
+            )
+        elif isinstance(item, tuple):
+            self._history.append(
+                [
+                    json.dumps(action_type),
+                    (
+                        item[0].to_json(parent=self._state.active()[0]),
+                        item[1].to_json(parent=self._state.active()[0]),
+                    ),
+                ]
+            )
+        else:
+            self._history.append(
+                [
+                    json.dumps(action_type),
+                    json.dumps(item),
+                ]
+            )
+
         try:
             if action_type == Action.NEXT_STATE:
                 self._state.next_state()
@@ -109,6 +121,9 @@ class Environment(gym.Env):
             elif action_type == Action.FREE_HOST:
                 _, active_gom = self._state.active()
                 active_gom.free_host(item)
+            elif action_type == Action.FUSE_MAPS:
+                _, active_gom = self._state.active()
+                active_gom.fuse_maps(item)
             else:
                 raise ValueError(f"Invalid action type {action_type}")
 
@@ -137,8 +152,6 @@ class Environment(gym.Env):
             self._sdfg,
             cpu_benchmark=self._cpu_benchmark,
             gpu_benchmark=self._gpu_benchmark,
-        )
-        self._state.init(
             host_model=MapNestModel.create(dace.DeviceType.CPU),
             device_model=MapNestModel.create(dace.DeviceType.GPU),
             transfer_tuner=self._transfer_tuner

@@ -66,4 +66,5 @@ class ClassificationAgent:
                 if not active_gom.array_table[array].is_host():
                     return Action.COPY_DEVICE_TO_HOST, array
 
+        self._decisions = None
         return Action.NEXT_STATE, None
