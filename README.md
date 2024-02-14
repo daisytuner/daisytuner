@@ -1,6 +1,6 @@
 # Transfer Tuning
 
-**Note:** The repository is not actively maintained.
+**Note:** The repository is not actively maintained. The development is continued at [Daisytuner SDK](https://github.com/daisytuner/daisytuner-sdk).
 
 This repository implements the [similarity-based transfer tuning algorithm](https://dl.acm.org/doi/abs/10.1145/3577193.3593714), which fuzzy matches loop transformations from online databases using *performance embeddings*.
 Additionally, the package provides several utils for benchmarking and optimizing SDFGs.
